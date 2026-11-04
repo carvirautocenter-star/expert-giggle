@@ -32,18 +32,18 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
 .col-2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .col-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 
-/* --- DESIGN BLINDADO EM GRID (ANTI-SOBREPOSIÇÃO) --- */
+/* --- DESIGN BLINDADO EM GRID --- */
 .label{
     position:absolute;
     overflow:hidden;
     background:var(--paper);
     color:var(--ink);
     display:grid;
-    /* 4 faixas: Topo, Nome, Imagem, Área Inferior (QR + Info) */
+    /* Topo, Nome, Imagem, Área Inferior (QR + Info) */
     grid-template-rows: 12% 20% 25% 43%; 
     align-items:center;
     justify-items:center;
-    padding: 2mm 1.5mm; /* Mais margem para não encostar na moldura */
+    padding: 2mm 1.5mm; /* Margem de respiro */
     font-family:'Playfair Display', Georgia, serif;
     box-sizing:border-box;
     border-radius: 3px;
@@ -72,7 +72,7 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
 .label .frame:after{bottom:-3px;left:50%;transform:translateX(-50%)}
 
 .label .topline{
-    font:700 5px/1 Arial,sans-serif; /* Aumentado levemente para não cortar */
+    font:700 5px/1 Arial,sans-serif;
     letter-spacing:0.5px;
     text-align:center;
     color:var(--accent);
@@ -135,16 +135,15 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
     display: flex;
     width: 100%;
     height: 100%;
-    align-items: flex-end;
+    align-items: stretch; /* Faz os filhos ocuparem toda a altura */
     justify-content: space-between;
     z-index: 1;
-    border-top: 1px solid rgba(0,0,0,0.08); /* Linha divisória sutil */
+    border-top: 1px solid rgba(0,0,0,0.08);
     padding-top: 1px;
 }
 
 .label .qr-container {
-    width: 28%;
-    height: 100%;
+    width: 25%; /* Ligeiramente menor */
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -167,13 +166,11 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
 }
 
 .label .info-area {
-    width: 72%;
-    height: 100%;
+    width: 75%; /* Aumentado para 75% */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    align-items: flex-end;
-    padding-left: 1mm;
+    padding-left: 1.5mm; /* Respiro da linha do QR */
     text-align: right;
 }
 
@@ -189,21 +186,20 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
 }
 .label .weight{text-align:left;}
 
+/* CORREÇÃO CRÍTICA DO CORTE DE TEXTO */
 .label .details{
-    display:flex;
-    flex-direction:column;
-    justify-content:flex-end;
-    align-items:flex-end;
-    text-align:right;
+    display: block; /* Mudou de flex para block para não cortar o texto na esquerda */
     font-family: Arial, sans-serif;
-    line-height:1.1;
-    width:100%;
-    overflow:hidden;
-    white-space: normal;
+    line-height: 1.15;
+    width: 100%;
+    overflow: hidden;
+    white-space: normal; /* Permite a quebra de linha */
     word-break: break-word;
+    text-align: right; /* Mantém o texto alinhado à direita */
+    padding-right: 0.5mm; /* Respiro para não encostar na borda */
 }
 .label .details span{
-    display:block;
+    display: block;
     width: 100%;
 }
 
@@ -252,7 +248,6 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
  <div class="card"><div class="muted">Embalagem estimada por pote</div><div class="stat" id="packTotal">R$ 2,10</div></div>
  </div>
  <div class="card"><h3>Fluxo de produção</h3><p class="muted">1. Confira os custos e preços. 2. Abra o Estúdio A4. 3. Escolha o produto e personalize a etiqueta. 4. Confira todas as páginas e imprima em escala real.</p><button onclick="tab('studio')">Criar etiquetas</button></div>
- <div class="note">A prévia é proporcional. Para confirmar o tamanho físico, imprima uma página de teste em papel comum e meça com uma régua antes de usar o papel fotográfico.</div>
 </section>
 
 <section id="products" class="tab">
@@ -269,7 +264,6 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
  <label>Preço por pote (R$)</label><input id="salePrice" value="5,99" oninput="calculate()">
  <label>Quantidade de potes produzidos</label><input id="qty" value="20" oninput="calculate()">
  </div><div class="card"><h3>Resultado</h3><p class="muted">Matéria-prima</p><div class="stat" id="rawCost">R$ 0,00</div><p class="muted">Embalagens</p><div class="stat" id="packCost">R$ 0,00</div><p class="muted">Faturamento estimado</p><div class="stat" id="revenue">R$ 0,00</div><p class="muted">Sobra bruta estimada</p><div class="stat" id="gross">R$ 0,00</div></div></div>
- <div class="note">A sobra bruta não desconta impostos, frete, taxas, mão de obra, comissões ou despesas fixas. O rendimento teórico é 20 potes de 50 g por kg, antes de perdas.</div>
 </section>
 
 <section id="studio" class="tab">
@@ -339,7 +333,7 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
 
   <label style="margin-top:15px; color:var(--green); border-bottom:1px solid #eee; padding-bottom:4px;">Informações (Datas, Lote, Contato)</label>
   <div class="col-3">
-    <div><label>Tamanho (px)</label><input id="detailsSize" type="number" value="3" min="1.5" max="10" step="0.5" oninput="renderPreview()"></div>
+    <div><label>Tamanho (px)</label><input id="detailsSize" type="number" value="2.8" min="1.5" max="10" step="0.1" oninput="renderPreview()"></div>
     <div style="grid-column: span 2;"><label>Cor</label><input id="detailsColor" type="color" value="#718078" oninput="renderPreview()"></div>
   </div>
 
@@ -458,7 +452,7 @@ function labelMarkup(p){
     <div class="artrow">${artHTML}</div>
     <div class="bottom-area">
         ${qrHTML}
-        <div class="info-area" style="width: ${qrUrl ? '72%' : '100%'};">
+        <div class="info-area" style="width: ${qrUrl ? '75%' : '100%'};">
             <div class="metaRow">
                 <span class="weight" style="color:${weightColor}">${esc(val("weight"))}</span>
                 ${val("showPrice")?`<span class="price" style="color:${priceColor}">${br(price)}</span>`:""}
@@ -537,24 +531,21 @@ function renderPreview(){
     if(!list.length) { el("preview").innerHTML = "<p>Nenhum produto selecionado.</p>"; return; }
     
     let w = n(val("w")), h = n(val("h"));
-    let targetWidthPx = 400; // Largura de visualização na tela
-    let wPx = w * 3.7795; // Conversão mm para px para cálculo do zoom
+    let targetWidthPx = 400; 
+    let wPx = w * 3.7795; 
     let zoom = targetWidthPx / wPx;
 
     let wrapper = document.createElement("div");
     wrapper.style.width = targetWidthPx + "px";
     wrapper.style.height = (h * 3.7795 * zoom) + "px";
     wrapper.style.position = "relative";
-    wrapper.style.overflow = "hidden"; // Corta o excesso se houver
+    wrapper.style.overflow = "hidden"; 
     wrapper.style.boxShadow = "0 10px 30px rgba(0,0,0,0.2)";
     wrapper.style.borderRadius = "4px";
     wrapper.style.margin = "20px auto";
     wrapper.style.background = "#fff";
 
-    // Cria o nó sem o modo de layout da folha (para usar as medidas físicas corretas)
     let node = buildLabelNode(list[0], null);
-    
-    // Aplica as dimensões físicas exatas e o Zoom
     node.style.width = w + "mm";
     node.style.height = h + "mm";
     node.style.left = "0";
@@ -614,7 +605,7 @@ function resetDesign(){
   el("emojiSize").value=18;
   el("weightSize").value=4.5; el("weightColor").value="#29332d";
   el("priceSize").value=9; el("priceColor").value="#55764f";
-  el("detailsSize").value=3; el("detailsColor").value="#718078";
+  el("detailsSize").value=2.8; el("detailsColor").value="#718078";
   renderPreview();
 }
 function backup(){let data={products,models,settings};let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});let a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="sabor-d-plus-backup.json";a.click();URL.revokeObjectURL(a.href)}
