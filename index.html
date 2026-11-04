@@ -23,28 +23,41 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
 .actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:680px;font-size:13px}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}th{background:#f5f7f3;color:#56645a}
 .note{background:#fff8e9;border:1px solid #efdfbd;border-radius:10px;padding:11px;color:#665536;font-size:12px;margin:12px 0}
 .studio{display:grid;grid-template-columns:minmax(280px,370px) minmax(0,1fr);gap:16px;align-items:start}.editor{max-height:calc(100vh - 35px);overflow:auto;position:sticky;top:10px}
-.preview{background:#dfe5df;padding:14px;border-radius:14px;overflow:auto}.sheet{width:min(100%,794px);aspect-ratio:210/297;background:white;margin:0 auto 15px;position:relative;box-shadow:0 4px 18px #1b2a201f;overflow:hidden}.sheet-inner{position:absolute;inset:0}
-.sheet-grid{position:absolute;display:grid;align-content:start;justify-content:start}
+.preview{background:#dfe5df;padding:14px;border-radius:14px;overflow:auto;display:flex;flex-direction:column;align-items:center}
+.sheet{width:min(100%,794px);aspect-ratio:210/297;background:white;margin:0 auto 15px;position:relative;box-shadow:0 4px 18px #1b2a201f;overflow:hidden}
+.sheet-inner{position:absolute;inset:0}
+.toggle-view{display:flex;gap:5px;margin-bottom:15px;background:#fff;padding:5px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.1)}
+.toggle-view button{background:#f0f0f0;color:#333;padding:8px 16px;font-size:13px;border-radius:6px}
+.toggle-view button.active{background:var(--green);color:#fff}
 
-/* --- DESIGN BLINDADO PARA 50x30mm --- */
+/* --- DESIGN BLINDADO EM GRID (ANTI-SOBREPOSIÇÃO) --- */
 .label{
     position:absolute;
     overflow:hidden;
     background:var(--paper);
     color:var(--ink);
-    display:flex;
-    flex-direction:column;
+    display:grid;
+    /* 5 faixas horizontais exatas: Topo, Nome, Imagem, Peso/Preço, Detalhes */
+    grid-template-rows: 12% 20% 33% 15% 20%; 
     align-items:center;
-    justify-content:space-between;
-    padding: 2px 3px; /* Margem interna mínima */
+    justify-items:center;
+    padding: 1.5mm;
     font-family:'Playfair Display', Georgia, serif;
     box-sizing:border-box;
-    border-radius: 4px;
+    border-radius: 3px;
+}
+
+/* Quando em modo de visualização única, o label ocupa 100% do container */
+.single-preview-wrapper .label {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    inset: auto;
 }
 
 .label .frame{
     position:absolute;
-    inset:1.5px; /* Moldura extremamente fina */
+    inset:1mm;
     border:1px solid var(--accent);
     border-radius:3px;
     pointer-events:none;
@@ -57,7 +70,7 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
     position:absolute;
     color:var(--accent);
     background:var(--paper);
-    font-size:5px;
+    font-size:4px;
     padding:0 1px;
     line-height:1;
 }
@@ -71,21 +84,16 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
     color:var(--accent);
     z-index:1;
     text-transform:uppercase;
-    flex-shrink: 0;
     width: 100%;
-    height: 6px; /* Altura fixa para não empurrar */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .label .logoimg{
-    display:block;
-    max-width:30%;
-    max-height:10px;
+    max-width:100%;
+    max-height:100%;
     object-fit:contain;
     z-index:1;
-    flex-shrink: 0;
 }
 
 .label .name{
@@ -95,8 +103,7 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
     line-height:1;
     z-index:1;
     width:100%;
-    flex-shrink: 0;
-    height: 20%; /* Trava o nome em 20% do tamanho */
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -109,15 +116,14 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
     display:flex;
     align-items:center;
     justify-content:center;
-    flex-grow:1; /* Emoji/Imagem pega o espaço restante */
-    min-height: 12px; /* GARANTE que a imagem/emoji apareça */
     width:100%;
+    height:100%;
     z-index:1;
     overflow: hidden;
 }
 
 .label .artrow img{
-    max-width:90%;
+    max-width:100%;
     max-height:100%;
     object-fit:contain;
 }
@@ -129,25 +135,15 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
     text-align:center;
 }
 
-.label .bottom-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    z-index: 1;
-    flex-shrink: 0; /* Impede que a parte de baixo desapareça */
-}
-
 .label .metaRow{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:2px;
     width:100%;
-    font:700 4.5px/1 Arial,sans-serif;
+    height: 100%;
+    font:700 4px/1 Arial,sans-serif;
     border-top: 1px solid rgba(0,0,0,0.1);
-    padding-top: 1px;
-    margin-top: 1px;
+    z-index:1;
 }
 .label .weight{text-align:left;}
 .label .price{text-align:right;font:800 8px/1 Arial,sans-serif;color:var(--price);white-space:nowrap;}
@@ -158,47 +154,52 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
     justify-content:center;
     align-items:center;
     text-align:center;
-    font:3.5px/1.1 Arial,sans-serif;
-    overflow:hidden;
+    font:3px/1.1 Arial,sans-serif;
     width:100%;
-    max-height: 25%; /* Não deixa os detalhes engolirem a etiqueta */
+    height: 100%;
+    overflow:hidden;
+    z-index:1;
 }
-.label .details span{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-
-.label .slogan{
-    text-align:center;
-    font:italic 4px/1 'Playfair Display', Georgia, serif;
-    color:var(--accent);
+.label .details span{
+    display:block;
+    max-width:100%;
     overflow:hidden;
-    white-space:nowrap;
     text-overflow:ellipsis;
-    width:100%;
-    margin-top:1px;
+    white-space:nowrap;
+    width: 100%;
+}
+
+/* Oculta o slogan na etiqueta de 50x30 para não quebrar o layout */
+.label .slogan{
+    display: none; 
 }
 
 /* Ajustes Preço e Lacre */
 .label.price-label, .label.seal-label {
+    grid-template-rows: 1fr 1fr 1fr;
     justify-content: center;
-    gap: 2px;
     text-align: center;
 }
 .label.price-label .name { font-family: 'Playfair Display', serif; font-weight: 700; height: auto;}
-.label.price-label .price { font-size: 14px; text-align: center; }
+.label.price-label .price { font-size: 14px; text-align: center; border:none;}
 .label.seal-label { border-radius: 12px; }
 .label.seal-label .name { font-family: 'Great Vibes', cursive; }
 
 .cut{position:absolute;inset:0;pointer-events:none}.cut:before,.cut:after{content:"";position:absolute;width:7px;height:7px;border-color:#68736a;border-style:solid}.cut:before{left:0;top:0;border-width:1px 0 0 1px}.cut:after{right:0;bottom:0;border-width:0 1px 1px 0}
 .pagecaption{text-align:center;color:#647168;font-size:11px;margin:-6px 0 12px}.hidden{display:none!important}
+
 @media(max-width:850px){main{padding:15px 3%}.studio{grid-template-columns:1fr}.editor{position:static;max-height:none}.preview{padding:8px}.sheet{width:100%;max-width:100%}}
+
+/* --- CONFIGURAÇÃO DE IMPRESSÃO (CORRIGIDA PARA PDF) --- */
 @media print{
  @page{size:A4 portrait;margin:0}
- html,body{margin:0!important;padding:0!important;width:210mm;background:#fff!important}
+ html,body{margin:0!important;padding:0!important;width:210mm;height:297mm;background:#fff!important;overflow:hidden;}
  body *{visibility:hidden!important}
  #printRoot,#printRoot *{visibility:visible!important}
- #printRoot{display:block!important;position:absolute;left:0;top:0;width:210mm}
- #printRoot .sheet{width:210mm!important;height:297mm!important;max-width:none!important;aspect-ratio:auto!important;box-shadow:none!important;margin:0!important;page-break-after:always;break-after:page}
- #printRoot .sheet:last-child{page-break-after:auto;break-after:auto}
- #printRoot .sheet-inner{inset:0}
+ #printRoot{display:block!important;position:absolute;left:0;top:0;width:210mm;height:297mm;}
+ #printRoot .sheet{width:210mm!important;height:297mm!important;max-width:none!important;aspect-ratio:auto!important;box-shadow:none!important;margin:0!important;padding:0!important;page-break-after:always;break-after:page;overflow:hidden;}
+ #printRoot .sheet:last-child{page-break-after:auto;break-after:auto;}
+ #printRoot .sheet-inner{inset:0;position:absolute;}
  #printRoot .label{print-color-adjust:exact;-webkit-print-color-adjust:exact}
 }
 </style>
@@ -241,7 +242,7 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
 
 <section id="studio" class="tab">
  <h2>Estúdio gourmet • Etiquetas A4</h2>
- <div class="note"><b>Atenção:</b> O tamanho de 50x30mm é muito pequeno. Para que todas as informações caibam, o sistema utiliza fontes minúsculas (3px a 8px). Recomendamos testar a impressão.</div>
+ <div class="note"><b>Pote de 140ml:</b> Recomendamos o formato de <b>50x30mm</b>. O sistema blindou o layout para que os textos e emojis não se sobreponham, mesmo em tamanhos reduzidos.</div>
  <div class="studio">
  <div class="card editor">
   <h3>Formato e impressão</h3>
@@ -282,10 +283,26 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
   <div class="actions"><button class="light" onclick="loadModel()">Carregar</button><button class="red" onclick="deleteModel()">Excluir</button></div>
   <div class="actions"><button class="gold" onclick="printA4()">Imprimir todas as páginas</button><button class="light" onclick="resetDesign()">Restaurar design</button></div>
  </div>
- <div>
-  <div class="card"><div class="row"><div><h3 style="margin:0">Pré-visualização A4</h3><div class="muted" id="sheetInfo">Calculando...</div></div><button class="gold" onclick="printA4()">Imprimir A4</button></div></div>
-  <div class="preview" id="preview"></div>
+ 
+ <div style="width:100%">
+  <div class="card">
+    <div class="row">
+      <div>
+        <h3 style="margin:0">Pré-visualização</h3>
+        <div class="muted" id="sheetInfo">Calculando...</div>
+      </div>
+      <div class="toggle-view" style="flex:0 0 auto;">
+        <button id="btnViewSingle" class="active" onclick="setViewMode('single')">Ver Etiqueta Única</button>
+        <button id="btnViewSheet" onclick="setViewMode('sheet')">Ver Folha A4</button>
+      </div>
+      <button class="gold" style="flex:0 0 auto;" onclick="printA4()">Imprimir A4</button>
+    </div>
+  </div>
+  <div class="preview" id="preview">
+    <!-- O conteúdo será injetado aqui pelo JS -->
+  </div>
  </div>
+
  </div>
 </section>
 
@@ -302,6 +319,8 @@ const seed=[
 ["Caldo de bacon",13.25,5.99,"🥓"],["Caldo de camarão",13.25,5.99,"🦐"],["Caldo de costela",13.25,5.99,"🍖"],["Caldo de galinha",13.25,5.99,"🍗"],["Caldo de legumes",13.25,5.99,"🥕"],["Caldo de peixe",13.25,5.99,"🐟"],["Caldo de carne",14.50,5.99,"🥩"],["Colorau",19.88,5.99,"🌶️"],["Cúrcuma em pó feculada",20.50,5.99,"🟡"],["Creme de cebola",21.25,5.99,"🧅"],["Tempero baiano",22.75,5.99,"🌶️"],["Páprica doce",23.38,5.99,"🫑"],["Páprica picante",23.38,5.99,"🌶️"],["Páprica defumada",25.50,6.99,"🔥"],["Curry",27.50,6.99,"🍛"],["Glutamato",27.50,6.99,"🧂"],["Alho em pó",30,6.99,"🧄"],["Tempero Ana Maria",31.75,6.99,"🌿"],["Lemon pepper",32.88,6.99,"🍋"],["Lemon pepper defumado",32.88,6.99,"🍋"],["Limão e ervas finas",36.78,6.99,"🍋"],["Tempero Pega Esposa",38.50,6.99,"❤️"],["Tempero para feijão",38.70,6.99,"🫘"],["Chimichurri com pimenta",43.98,8.99,"🌶️"],["Chimichurri sem pimenta",43.98,8.99,"🌿"],["Tempero Pega Marido",43.98,8.99,"❤️"],["Molho tártaro",44.15,8.99,"🥣"],["Tempero do Edu",44.65,8.99,"👨‍🍳"],["Canela em pó pura",47.75,8.99,"🟤"],["Salsa, cebola e alho",51.48,8.99,"🧄"],["Cebola em pó",58,8.99,"🧅"],["Vinagrete",68.98,8.99,"🥗"],["Condimento fumaça em pó",42.60,8.99,"🔥"],["Tempero do Chef",32.60,6.99,"👨‍🍳"]
 ].map((p,i)=>({id:i+1,name:p[0],cost:p[1],price:p[2],emoji:p[3]}));
 let products=get("sd6_products",seed),models=get("sd6_models",[]),settings=get("sd6_settings",{pot:1.5,label:.2,seal:.15,extra:.25,brand:"Sabor D+",contact:"",storage:"Conservar em local seco e fresco."}),logo="",art="";
+let viewMode = 'single'; // 'single' ou 'sheet'
+
 function get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}}
 function save(){localStorage.setItem("sd6_products",JSON.stringify(products));localStorage.setItem("sd6_models",JSON.stringify(models));localStorage.setItem("sd6_settings",JSON.stringify(settings))}
 function br(v){return Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}
@@ -335,11 +354,9 @@ function labelMarkup(p){
  let accent=val("accent"),paper=val("paper"),ink=val("ink"),priceColor=val("priceColor");
  
  let logoHTML=logo?`<img class="logoimg" src="${logo}" alt="Logo">`:`<div class="topline">${esc(settings.brand||"SABOR D+")}</div>`;
- 
  let artHTML=art?`<img src="${art}" alt="Ilustração">`:`<span class="emoji">${esc(emoji||"🌿")}</span>`;
  
  let contactText=val("contact")||settings.contact||"";
- // Junta todas as informações em linhas curtas
  let detailLines=[val("made")?`Fab: ${dateBR(val("made"))}`:"",val("expiry")?`Val: ${dateBR(val("expiry"))}`:"",val("lot")?`Lote: ${val("lot")}`:"",contactText?`Contato: ${contactText}`:"",val("extra")].filter(Boolean);
  let details=detailLines.map(x=>`<span>${esc(x)}</span>`).join("");
  
@@ -348,7 +365,7 @@ function labelMarkup(p){
  let frameHTML=frame==="none"?"":`<div class="frame" style="${frame==="double"?"border-width:3px;border-style:double;":""}"></div>`;
  if(frame==="simple")frameHTML=`<div class="frame" style="border-radius:4px; border-style:dashed; box-shadow:none;"></div>`;
  
- if(kind==="price") return `<div class="label price-label" style="${style}">${frameHTML}${logoHTML}<div class="name">${esc(name)}</div><div class="price">${val("showPrice")?br(price):""}</div><div class="slogan">${esc(val("slogan"))}</div></div>`;
+ if(kind==="price") return `<div class="label price-label" style="${style}">${frameHTML}${logoHTML}<div class="name">${esc(name)}</div><div class="price">${val("showPrice")?br(price):""}</div></div>`;
  if(kind==="seal") return `<div class="label seal-label" style="${style}">${frameHTML}${logoHTML}<div class="name">${esc(val("slogan")||name)}</div><div class="emoji">${esc(emoji||"🌿")}</div><div class="topline">${esc(settings.brand||"SABOR D+")}</div></div>`;
  
  return `<div class="label" style="${style}">
@@ -356,15 +373,24 @@ function labelMarkup(p){
     ${logoHTML}
     <div class="name">${esc(name)}</div>
     <div class="artrow">${artHTML}</div>
-    <div class="bottom-info">
-        <div class="metaRow">
-            <span class="weight">${esc(val("weight"))}</span>
-            ${val("showPrice")?`<span class="price">${br(price)}</span>`:""}
-        </div>
-        ${details ? `<div class="details">${details}</div>` : ""}
-        ${val("slogan") ? `<div class="slogan">${esc(val("slogan"))}</div>` : ""}
+    <div class="metaRow">
+        <span class="weight">${esc(val("weight"))}</span>
+        ${val("showPrice")?`<span class="price">${br(price)}</span>`:""}
     </div>
+    ${details ? `<div class="details">${details}</div>` : `<div class="details"></div>`}
  </div>`;
+}
+
+function setViewMode(mode) {
+    viewMode = mode;
+    if(mode === 'single') {
+        el('btnViewSingle').classList.add('active');
+        el('btnViewSheet').classList.remove('active');
+    } else {
+        el('btnViewSheet').classList.add('active');
+        el('btnViewSingle').classList.remove('active');
+    }
+    renderPreview();
 }
 
 function layout(){
@@ -372,6 +398,7 @@ function layout(){
  let cols=Math.max(0,Math.floor((210-2*mx+gx)/(w+gx))),rows=Math.max(0,Math.floor((297-2*my+gy)/(h+gy)));
  return {w,h,mx,my,gx,gy,cols,rows,per:cols*rows};
 }
+
 function targets(){
  let copies=Math.max(1,Math.min(500,n(val("copies"))||1));
  if(val("scope")==="all"){
@@ -383,41 +410,82 @@ function targets(){
  if(el("fillSheet").checked){let L=layout();return Array(Math.max(1,L.per)).fill(p)}
  return Array(copies).fill(p);
 }
+
 function buildLabelNode(p,L,index){
  let node=document.createElement("div");node.innerHTML=labelMarkup(p);node=node.firstElementChild;
- let col=index%L.cols,row=Math.floor(index/L.cols);
- node.style.left=((L.mx+col*(L.w+L.gx))/210*100)+"%";
- node.style.top=((L.my+row*(L.h+L.gy))/297*100)+"%";
- node.style.width=(L.w/210*100)+"%";
- node.style.height=(L.h/297*100)+"%";
+ if(L && index !== undefined) {
+     let col=index%L.cols,row=Math.floor(index/L.cols);
+     node.style.left=((L.mx+col*(L.w+L.gx))/210*100)+"%";
+     node.style.top=((L.my+row*(L.h+L.gy))/297*100)+"%";
+     node.style.width=(L.w/210*100)+"%";
+     node.style.height=(L.h/297*100)+"%";
+ }
  
- // Fator de escala para 50x30. Se o usuário mudar para 60x40, a escala aumenta.
- let scale=Math.min(L.w/50, L.h/30);
+ // Fator de escala para 50x30. 
+ let scale = L ? Math.min(L.w/50, L.h/30) : 1;
  
- // Aplicando tamanhos com limites de segurança para não sumirem
+ // No modo unitário, usamos uma escala fixa para ficar legível na tela
+ if(!L) scale = Math.max(1, 200 / Math.max(n(val("w")), n(val("h")))); // Aumenta para visualização
+
  node.querySelectorAll(".name").forEach(x=>x.style.fontSize=Math.max(10,Math.min(24,n(val("nameSize"))||14)*scale)+"px");
  node.querySelectorAll(".price").forEach(x=>x.style.fontSize=Math.max(8,Math.min(18,n(val("priceSize"))||10)*scale)+"px");
  node.querySelectorAll(".emoji").forEach(x=>x.style.fontSize=Math.max(14,Math.min(30,18*scale))+"px");
  node.querySelectorAll(".details span").forEach(x=>x.style.fontSize=Math.max(3.5,Math.min(7,4.5*scale))+"px");
  node.querySelectorAll(".topline").forEach(x=>x.style.fontSize=Math.max(3.5,Math.min(6,4*scale))+"px");
+ node.querySelectorAll(".metaRow").forEach(x=>x.style.fontSize=Math.max(3.5,Math.min(6,4*scale))+"px");
  
- if(el("cuts").checked){let c=document.createElement("div");c.className="cut";node.appendChild(c)}
+ if(el("cuts").checked && L){let c=document.createElement("div");c.className="cut";node.appendChild(c)}
  return node;
 }
+
 function renderPreview(){
  if(!el("preview"))return;
- let L=layout(),list=targets(),pages=Math.max(1,Math.ceil(list.length/Math.max(1,L.per)));
  el("preview").innerHTML="";
- el("sheetInfo").textContent=`${L.cols} colunas × ${L.rows} linhas • ${L.per} por folha • ${list.length} etiquetas • ${pages} página(s)`;
- if(L.cols<1||L.rows<1){el("preview").innerHTML="<p>As dimensões não cabem na folha com as margens atuais. Reduza o tamanho ou as margens.</p>";return}
- for(let pg=0;pg<pages;pg++){
-   let sheet=document.createElement("div");sheet.className="sheet";
-   let inner=document.createElement("div");inner.className="sheet-inner";
-   list.slice(pg*L.per,(pg+1)*L.per).forEach((p,i)=>inner.appendChild(buildLabelNode(p,L,i)));
-   sheet.appendChild(inner);el("preview").appendChild(sheet);
-   let cap=document.createElement("div");cap.className="pagecaption";cap.textContent=`Página ${pg+1} de ${pages} • A4 210 × 297 mm`;el("preview").appendChild(cap);
+ 
+ let list=targets();
+ let L=layout();
+ 
+ if(viewMode === 'single'){
+    el("sheetInfo").textContent = "Visualizando Etiqueta Única (Escala Ampliada)";
+    if(!list.length) { el("preview").innerHTML = "<p>Nenhum produto selecionado.</p>"; return; }
+    
+    // Cria um container que simula a proporção exata da etiqueta
+    let w = n(val("w")), h = n(val("h"));
+    let wrapper = document.createElement("div");
+    wrapper.className = "single-preview-wrapper";
+    wrapper.style.width = "300px"; // Tamanho fixo na tela
+    wrapper.style.height = (300 * (h/w)) + "px"; // Altura proporcional
+    wrapper.style.position = "relative";
+    wrapper.style.background = "#fff";
+    wrapper.style.boxShadow = "0 10px 30px rgba(0,0,0,0.2)";
+    wrapper.style.borderRadius = "4px";
+    wrapper.style.margin = "20px auto";
+    
+    // Passa L como null para não usar posicionamento absoluto da folha A4
+    let node = buildLabelNode(list[0], null); 
+    wrapper.appendChild(node);
+    el("preview").appendChild(wrapper);
+    
+    // Adiciona informações de tamanho
+    let info = document.createElement("div");
+    info.className = "pagecaption";
+    info.textContent = `Proporção: ${w}mm × ${h}mm`;
+    el("preview").appendChild(info);
+    
+ } else {
+    let pages=Math.max(1,Math.ceil(list.length/Math.max(1,L.per)));
+    el("sheetInfo").textContent=`${L.cols} colunas × ${L.rows} linhas • ${L.per} por folha • ${list.length} etiquetas • ${pages} página(s)`;
+    if(L.cols<1||L.rows<1){el("preview").innerHTML="<p>As dimensões não cabem na folha com as margens atuais. Reduza o tamanho ou as margens.</p>";return}
+    for(let pg=0;pg<pages;pg++){
+      let sheet=document.createElement("div");sheet.className="sheet";
+      let inner=document.createElement("div");inner.className="sheet-inner";
+      list.slice(pg*L.per,(pg+1)*L.per).forEach((p,i)=>inner.appendChild(buildLabelNode(p,L,i)));
+      sheet.appendChild(inner);el("preview").appendChild(sheet);
+      let cap=document.createElement("div");cap.className="pagecaption";cap.textContent=`Página ${pg+1} de ${pages} • A4 210 × 297 mm`;el("preview").appendChild(cap);
+    }
  }
 }
+
 function printA4(){
  let L=layout(),list=targets();if(!L.per){alert("As etiquetas não cabem na folha. Ajuste as dimensões ou margens.");return}
  if(!list.length){alert("Selecione um produto.");return}
@@ -436,6 +504,7 @@ function printA4(){
  }
  window.print();
 }
+
 function saveModel(){let name=val("modelName").trim();if(!name)return alert("Digite um nome para o modelo.");models.push({id:Date.now(),name,state:state()});save();renderModels();updateStats();alert("Modelo salvo.")}
 function renderModels(){el("modelList").innerHTML='<option value="">Selecione</option>'+models.map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join("")}
 function loadModel(){let m=models.find(x=>x.id==val("modelList"));if(!m)return alert("Selecione um modelo.");applyState(m.state)}
