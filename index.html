@@ -29,6 +29,8 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
 .toggle-view{display:flex;gap:5px;margin-bottom:15px;background:#fff;padding:5px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.1)}
 .toggle-view button{background:#f0f0f0;color:#333;padding:8px 16px;font-size:13px;border-radius:6px}
 .toggle-view button.active{background:var(--green);color:#fff}
+.col-2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.col-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 
 /* --- DESIGN BLINDADO EM GRID (ANTI-SOBREPOSIÇÃO) --- */
 .label{
@@ -37,8 +39,8 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
     background:var(--paper);
     color:var(--ink);
     display:grid;
-    /* 5 faixas horizontais exatas: Topo, Nome, Imagem, Peso/Preço, Detalhes */
-    grid-template-rows: 12% 20% 33% 15% 20%; 
+    /* 5 faixas horizontais exatas */
+    grid-template-rows: 12% 20% 28% 15% 25%; 
     align-items:center;
     justify-items:center;
     padding: 1.5mm;
@@ -47,7 +49,6 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
     border-radius: 3px;
 }
 
-/* Quando em modo de visualização única, o label ocupa 100% do container */
 .single-preview-wrapper .label {
     position: relative;
     width: 100%;
@@ -141,12 +142,11 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
     justify-content:space-between;
     width:100%;
     height: 100%;
-    font:700 4px/1 Arial,sans-serif;
     border-top: 1px solid rgba(0,0,0,0.1);
     z-index:1;
 }
 .label .weight{text-align:left;}
-.label .price{text-align:right;font:800 8px/1 Arial,sans-serif;color:var(--price);white-space:nowrap;}
+.label .price{text-align:right;font-family: Arial, sans-serif; font-weight:800; white-space:nowrap;}
 
 .label .details{
     display:flex;
@@ -154,24 +154,18 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
     justify-content:center;
     align-items:center;
     text-align:center;
-    font:3px/1.1 Arial,sans-serif;
+    font-family: Arial, sans-serif;
+    line-height:1.1;
     width:100%;
     height: 100%;
     overflow:hidden;
     z-index:1;
+    white-space: normal; /* Permite quebra de linha */
+    word-break: break-word;
 }
 .label .details span{
     display:block;
-    max-width:100%;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
     width: 100%;
-}
-
-/* Oculta o slogan na etiqueta de 50x30 para não quebrar o layout */
-.label .slogan{
-    display: none; 
 }
 
 /* Ajustes Preço e Lacre */
@@ -180,7 +174,7 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
     justify-content: center;
     text-align: center;
 }
-.label.price-label .name { font-family: 'Playfair Display', serif; font-weight: 700; height: auto;}
+.label.price-label .name { font-family: 'Playfair Display', serif; font-weight: 700; height: auto; white-space: normal;}
 .label.price-label .price { font-size: 14px; text-align: center; border:none;}
 .label.seal-label { border-radius: 12px; }
 .label.seal-label .name { font-family: 'Great Vibes', cursive; }
@@ -190,7 +184,6 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
 
 @media(max-width:850px){main{padding:15px 3%}.studio{grid-template-columns:1fr}.editor{position:static;max-height:none}.preview{padding:8px}.sheet{width:100%;max-width:100%}}
 
-/* --- CONFIGURAÇÃO DE IMPRESSÃO (CORRIGIDA PARA PDF) --- */
 @media print{
  @page{size:A4 portrait;margin:0}
  html,body{margin:0!important;padding:0!important;width:210mm;height:297mm;background:#fff!important;overflow:hidden;}
@@ -242,7 +235,7 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
 
 <section id="studio" class="tab">
  <h2>Estúdio gourmet • Etiquetas A4</h2>
- <div class="note"><b>Pote de 140ml:</b> Recomendamos o formato de <b>50x30mm</b>. O sistema blindou o layout para que os textos e emojis não se sobreponham, mesmo em tamanhos reduzidos.</div>
+ <div class="note"><b>Pote de 140ml:</b> Recomendamos o formato de <b>50x30mm</b>. Ajuste os tamanhos das fontes na aba "Identidade Visual" para encaixar perfeitamente.</div>
  <div class="studio">
  <div class="card editor">
   <h3>Formato e impressão</h3>
@@ -260,21 +253,56 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
   <div class="row"><div><label>Ícone / emoji</label><input id="emoji" value="🌶️" oninput="renderPreview()"></div><div><label>Peso líquido</label><input id="weight" value="50 g" oninput="renderPreview()"></div></div>
   <label>Preço (R$)</label><input id="price" value="5,99" oninput="renderPreview()">
   <label><input type="checkbox" id="showPrice" checked onchange="renderPreview()"> Exibir preço</label>
-  <label>Frase / chamada</label><input id="slogan" value="O toque especial da sua cozinha!" oninput="renderPreview()">
   <label>Fabricação</label><input id="made" type="date" oninput="renderPreview()">
   <label>Validade</label><input id="expiry" type="date" oninput="renderPreview()">
   <label>Lote</label><input id="lot" placeholder="Ex.: SD-001" oninput="renderPreview()">
   <label>Contato / WhatsApp</label><input id="contact" placeholder="(83) 99999-9999" oninput="renderPreview()">
-  <label>Conservação / informações</label><textarea id="extra" oninput="renderPreview()">Conservar em local seco e fresco.</textarea>
+  <label>Conservação / informações</label><textarea id="extra" oninput="renderPreview()">Conservar em local seco.</textarea>
   <hr style="border:0;border-top:1px solid #e2e8e2;margin:16px 0">
-  <h3>Identidade visual</h3>
+  
+  <h3>Identidade visual e Tipografia</h3>
   <label>Logo Sabor D+ (opcional)</label><input type="file" id="logoFile" accept="image/*" onchange="imageUpload(event,'logo')"><div class="muted" id="logoState">Sem logo personalizada</div>
   <label>Ilustração do ingrediente (opcional)</label><input type="file" id="artFile" accept="image/*" onchange="imageUpload(event,'art')"><div class="muted" id="artState">Será usado o emoji se não houver imagem</div>
-  <div class="row"><div><label>Cor da moldura</label><input id="accent" type="color" value="#819477" oninput="renderPreview()"></div><div><label>Fundo</label><input id="paper" type="color" value="#fffdf7" oninput="renderPreview()"></div></div>
-  <div class="row"><div><label>Texto</label><input id="ink" type="color" value="#292f29" oninput="renderPreview()"></div><div><label>Preço</label><input id="priceColor" type="color" value="#55764f" oninput="renderPreview()"></div></div>
-  <div class="row"><div><label>Fonte do nome (px)</label><input id="nameSize" type="number" value="14" min="6" max="36" oninput="renderPreview()"></div><div><label>Fonte do preço (px)</label><input id="priceSize" type="number" value="10" min="6" max="42" oninput="renderPreview()"></div></div>
-  <label>Alinhamento</label><select id="align" onchange="renderPreview()"><option value="center">Centralizado</option><option value="left">À esquerda</option><option value="right">À direita</option></select>
-  <label>Estilo da moldura</label><select id="frameStyle" onchange="renderPreview()"><option value="ornate">Ornamental (Gourmet)</option><option value="simple">Minimalista</option><option value="double">Dupla</option><option value="none">Sem moldura</option></select>
+  
+  <div class="col-2">
+    <div><label>Cor Moldura</label><input id="accent" type="color" value="#819477" oninput="renderPreview()"></div>
+    <div><label>Cor Fundo</label><input id="paper" type="color" value="#fffdf7" oninput="renderPreview()"></div>
+  </div>
+  
+  <label style="margin-top:15px; color:var(--green); border-bottom:1px solid #eee; padding-bottom:4px;">Nome / Título</label>
+  <div class="col-3">
+    <div><label>Tamanho (px)</label><input id="nameSize" type="number" value="14" min="6" max="40" oninput="renderPreview()"></div>
+    <div style="grid-column: span 2;"><label>Cor</label><input id="nameColor" type="color" value="#29332d" oninput="renderPreview()"></div>
+  </div>
+
+  <label style="margin-top:15px; color:var(--green); border-bottom:1px solid #eee; padding-bottom:4px;">Emoji / Imagem</label>
+  <div class="col-3">
+    <div><label>Tamanho (px)</label><input id="emojiSize" type="number" value="18" min="8" max="40" oninput="renderPreview()"></div>
+  </div>
+
+  <label style="margin-top:15px; color:var(--green); border-bottom:1px solid #eee; padding-bottom:4px;">Peso</label>
+  <div class="col-3">
+    <div><label>Tamanho (px)</label><input id="weightSize" type="number" value="4.5" min="2" max="15" step="0.5" oninput="renderPreview()"></div>
+    <div style="grid-column: span 2;"><label>Cor</label><input id="weightColor" type="color" value="#29332d" oninput="renderPreview()"></div>
+  </div>
+
+  <label style="margin-top:15px; color:var(--green); border-bottom:1px solid #eee; padding-bottom:4px;">Preço</label>
+  <div class="col-3">
+    <div><label>Tamanho (px)</label><input id="priceSize" type="number" value="9" min="4" max="30" step="0.5" oninput="renderPreview()"></div>
+    <div style="grid-column: span 2;"><label>Cor</label><input id="priceColor" type="color" value="#55764f" oninput="renderPreview()"></div>
+  </div>
+
+  <label style="margin-top:15px; color:var(--green); border-bottom:1px solid #eee; padding-bottom:4px;">Informações (Datas, Lote, Contato)</label>
+  <div class="col-3">
+    <div><label>Tamanho (px)</label><input id="detailsSize" type="number" value="3" min="1.5" max="10" step="0.5" oninput="renderPreview()"></div>
+    <div style="grid-column: span 2;"><label>Cor</label><input id="detailsColor" type="color" value="#718078" oninput="renderPreview()"></div>
+  </div>
+
+  <div class="row" style="margin-top:15px">
+    <div><label>Alinhamento</label><select id="align" onchange="renderPreview()"><option value="center">Centralizado</option><option value="left">À esquerda</option><option value="right">À direita</option></select></div>
+    <div><label>Estilo Moldura</label><select id="frameStyle" onchange="renderPreview()"><option value="ornate">Ornamental</option><option value="simple">Minimalista</option><option value="double">Dupla</option><option value="none">Sem moldura</option></select></div>
+  </div>
+
   <hr style="border:0;border-top:1px solid #e2e8e2;margin:16px 0">
   <h3>Modelos personalizados</h3>
   <label>Nome do modelo</label><input id="modelName" placeholder="Ex.: Linha de pápricas">
@@ -310,7 +338,7 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
  <h2>Configurações</h2><div class="card"><h3>Custos de embalagem por pote</h3>
  <div class="row"><div><label>Pote + tampa (R$)</label><input id="cPot" value="1,50" oninput="saveSettings()"></div><div><label>Etiqueta frontal (R$)</label><input id="cLabel" value="0,20" oninput="saveSettings()"></div></div>
  <div class="row"><div><label>Lacre (R$)</label><input id="cSeal" value="0,15" oninput="saveSettings()"></div><div><label>Perdas e auxiliares (R$)</label><input id="cExtra" value="0,25" oninput="saveSettings()"></div></div><p class="muted">Valores iniciais totalizam R$ 2,10 por pote. Altere conforme seus custos reais.</p><div class="stat" id="settingsTotal">R$ 2,10</div></div>
- <div class="card"><h3>Marca e contato padrão</h3><label>Nome da marca</label><input id="brandName" value="Sabor D+"><label>Contato padrão</label><input id="defaultContact"><label>Texto de conservação</label><input id="defaultStorage" value="Conservar em local seco e fresco."><button onclick="saveSettings()">Salvar configurações</button></div>
+ <div class="card"><h3>Marca e contato padrão</h3><label>Nome da marca</label><input id="brandName" value="Sabor D+"><label>Contato padrão</label><input id="defaultContact"><label>Texto de conservação</label><input id="defaultStorage" value="Conservar em local seco."><button onclick="saveSettings()">Salvar configurações</button></div>
 </section>
 </main>
 <div id="printRoot" style="display:none"></div>
@@ -318,8 +346,8 @@ label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5
 const seed=[
 ["Caldo de bacon",13.25,5.99,"🥓"],["Caldo de camarão",13.25,5.99,"🦐"],["Caldo de costela",13.25,5.99,"🍖"],["Caldo de galinha",13.25,5.99,"🍗"],["Caldo de legumes",13.25,5.99,"🥕"],["Caldo de peixe",13.25,5.99,"🐟"],["Caldo de carne",14.50,5.99,"🥩"],["Colorau",19.88,5.99,"🌶️"],["Cúrcuma em pó feculada",20.50,5.99,"🟡"],["Creme de cebola",21.25,5.99,"🧅"],["Tempero baiano",22.75,5.99,"🌶️"],["Páprica doce",23.38,5.99,"🫑"],["Páprica picante",23.38,5.99,"🌶️"],["Páprica defumada",25.50,6.99,"🔥"],["Curry",27.50,6.99,"🍛"],["Glutamato",27.50,6.99,"🧂"],["Alho em pó",30,6.99,"🧄"],["Tempero Ana Maria",31.75,6.99,"🌿"],["Lemon pepper",32.88,6.99,"🍋"],["Lemon pepper defumado",32.88,6.99,"🍋"],["Limão e ervas finas",36.78,6.99,"🍋"],["Tempero Pega Esposa",38.50,6.99,"❤️"],["Tempero para feijão",38.70,6.99,"🫘"],["Chimichurri com pimenta",43.98,8.99,"🌶️"],["Chimichurri sem pimenta",43.98,8.99,"🌿"],["Tempero Pega Marido",43.98,8.99,"❤️"],["Molho tártaro",44.15,8.99,"🥣"],["Tempero do Edu",44.65,8.99,"👨‍🍳"],["Canela em pó pura",47.75,8.99,"🟤"],["Salsa, cebola e alho",51.48,8.99,"🧄"],["Cebola em pó",58,8.99,"🧅"],["Vinagrete",68.98,8.99,"🥗"],["Condimento fumaça em pó",42.60,8.99,"🔥"],["Tempero do Chef",32.60,6.99,"👨‍🍳"]
 ].map((p,i)=>({id:i+1,name:p[0],cost:p[1],price:p[2],emoji:p[3]}));
-let products=get("sd6_products",seed),models=get("sd6_models",[]),settings=get("sd6_settings",{pot:1.5,label:.2,seal:.15,extra:.25,brand:"Sabor D+",contact:"",storage:"Conservar em local seco e fresco."}),logo="",art="";
-let viewMode = 'single'; // 'single' ou 'sheet'
+let products=get("sd6_products",seed),models=get("sd6_models",[]),settings=get("sd6_settings",{pot:1.5,label:.2,seal:.15,extra:.25,brand:"Sabor D+",contact:"",storage:"Conservar em local seco."}),logo="",art="";
+let viewMode = 'single';
 
 function get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}}
 function save(){localStorage.setItem("sd6_products",JSON.stringify(products));localStorage.setItem("sd6_models",JSON.stringify(models));localStorage.setItem("sd6_settings",JSON.stringify(settings))}
@@ -344,14 +372,17 @@ function initSettings(){el("cPot").value=settings.pot;el("cLabel").value=setting
 function loadProductLabel(){let p=products.find(x=>x.id==val("chosen"));if(!p)return;el("lname").value=p.name;el("emoji").value=p.emoji;el("price").value=p.price.toFixed(2).replace(".",",");renderPreview()}
 function kindChange(){let k=val("kind");if(k==="product"){el("w").value=50;el("h").value=30}else if(k==="price"){el("w").value=40;el("h").value=25}else{el("w").value=45;el("h").value=20}renderPreview()}
 function imageUpload(e,type){let f=e.target.files[0];if(!f)return;if(f.size>2*1024*1024){alert("Imagem máxima de 2 MB.");e.target.value="";return}let r=new FileReader();r.onload=()=>{if(type==="logo"){logo=r.result;el("logoState").textContent="Logo carregada"}else{art=r.result;el("artState").textContent="Ilustração carregada"}renderPreview()};r.readAsDataURL(f)}
-function state(){let ids=["kind","w","h","mx","my","gx","gy","copies","fillSheet","scope","cuts","chosen","lname","emoji","weight","price","showPrice","slogan","made","expiry","lot","contact","extra","accent","paper","ink","priceColor","nameSize","priceSize","align","frameStyle"];let o={};ids.forEach(id=>o[id]=el(id).type==="checkbox"?el(id).checked:val(id));o.logo=logo;o.art=art;return o}
+function state(){let ids=["kind","w","h","mx","my","gx","gy","copies","fillSheet","scope","cuts","chosen","lname","emoji","weight","price","showPrice","made","expiry","lot","contact","extra","accent","paper","nameSize","nameColor","emojiSize","weightSize","weightColor","priceSize","priceColor","detailsSize","detailsColor","align","frameStyle"];let o={};ids.forEach(id=>o[id]=el(id).type==="checkbox"?el(id).checked:val(id));o.logo=logo;o.art=art;return o}
 function applyState(o){Object.keys(o).forEach(id=>{if(el(id)){if(el(id).type==="checkbox")el(id).checked=o[id];else el(id).value=o[id]}});logo=o.logo||"";art=o.art||"";el("logoState").textContent=logo?"Logo carregada":"Sem logo personalizada";el("artState").textContent=art?"Ilustração carregada":"Será usado o emoji se não houver imagem";renderPreview()}
 function dateBR(v){if(!v)return "";let a=v.split("-");return a.length===3?`${a[2]}/${a[1]}/${a[0]}`:v}
 
 function labelMarkup(p){
  let useCatalog=val("scope")==="all";
  let name=useCatalog?p.name:val("lname"),emoji=useCatalog?p.emoji:val("emoji"),price=useCatalog?p.price:n(val("price")),kind=val("kind"),frame=val("frameStyle"),align=val("align");
- let accent=val("accent"),paper=val("paper"),ink=val("ink"),priceColor=val("priceColor");
+ let accent=val("accent"),paper=val("paper");
+ 
+ // Cores e tamanhos dinâmicos
+ let nameColor=val("nameColor"), weightColor=val("weightColor"), priceColor=val("priceColor"), detailsColor=val("detailsColor");
  
  let logoHTML=logo?`<img class="logoimg" src="${logo}" alt="Logo">`:`<div class="topline">${esc(settings.brand||"SABOR D+")}</div>`;
  let artHTML=art?`<img src="${art}" alt="Ilustração">`:`<span class="emoji">${esc(emoji||"🌿")}</span>`;
@@ -360,24 +391,24 @@ function labelMarkup(p){
  let detailLines=[val("made")?`Fab: ${dateBR(val("made"))}`:"",val("expiry")?`Val: ${dateBR(val("expiry"))}`:"",val("lot")?`Lote: ${val("lot")}`:"",contactText?`Contato: ${contactText}`:"",val("extra")].filter(Boolean);
  let details=detailLines.map(x=>`<span>${esc(x)}</span>`).join("");
  
- let style=`--accent:${accent};--paper:${paper};--ink:${ink};--price:${priceColor};background:${paper};color:${ink};text-align:${align};border:${frame==="none"?"0":`1px solid ${accent}`}`;
+ let style=`--accent:${accent};--paper:${paper};background:${paper};text-align:${align};border:${frame==="none"?"0":`1px solid ${accent}`}`;
  
  let frameHTML=frame==="none"?"":`<div class="frame" style="${frame==="double"?"border-width:3px;border-style:double;":""}"></div>`;
  if(frame==="simple")frameHTML=`<div class="frame" style="border-radius:4px; border-style:dashed; box-shadow:none;"></div>`;
  
- if(kind==="price") return `<div class="label price-label" style="${style}">${frameHTML}${logoHTML}<div class="name">${esc(name)}</div><div class="price">${val("showPrice")?br(price):""}</div></div>`;
- if(kind==="seal") return `<div class="label seal-label" style="${style}">${frameHTML}${logoHTML}<div class="name">${esc(val("slogan")||name)}</div><div class="emoji">${esc(emoji||"🌿")}</div><div class="topline">${esc(settings.brand||"SABOR D+")}</div></div>`;
+ if(kind==="price") return `<div class="label price-label" style="${style}">${frameHTML}${logoHTML}<div class="name" style="color:${nameColor}">${esc(name)}</div><div class="price" style="color:${priceColor}">${val("showPrice")?br(price):""}</div></div>`;
+ if(kind==="seal") return `<div class="label seal-label" style="${style}">${frameHTML}${logoHTML}<div class="name" style="color:${nameColor}">${esc(name)}</div><div class="emoji">${esc(emoji||"🌿")}</div><div class="topline">${esc(settings.brand||"SABOR D+")}</div></div>`;
  
  return `<div class="label" style="${style}">
     ${frameHTML}
     ${logoHTML}
-    <div class="name">${esc(name)}</div>
+    <div class="name" style="color:${nameColor}">${esc(name)}</div>
     <div class="artrow">${artHTML}</div>
     <div class="metaRow">
-        <span class="weight">${esc(val("weight"))}</span>
-        ${val("showPrice")?`<span class="price">${br(price)}</span>`:""}
+        <span class="weight" style="color:${weightColor}">${esc(val("weight"))}</span>
+        ${val("showPrice")?`<span class="price" style="color:${priceColor}">${br(price)}</span>`:""}
     </div>
-    ${details ? `<div class="details">${details}</div>` : `<div class="details"></div>`}
+    <div class="details" style="color:${detailsColor}">${details}</div>
  </div>`;
 }
 
@@ -421,18 +452,17 @@ function buildLabelNode(p,L,index){
      node.style.height=(L.h/297*100)+"%";
  }
  
- // Fator de escala para 50x30. 
+ // Fator de escala (A4 vs Tela Única)
  let scale = L ? Math.min(L.w/50, L.h/30) : 1;
- 
- // No modo unitário, usamos uma escala fixa para ficar legível na tela
- if(!L) scale = Math.max(1, 200 / Math.max(n(val("w")), n(val("h")))); // Aumenta para visualização
+ if(!L) scale = Math.max(1, 200 / Math.max(n(val("w")), n(val("h")))); // Aumenta para visualização única
 
- node.querySelectorAll(".name").forEach(x=>x.style.fontSize=Math.max(10,Math.min(24,n(val("nameSize"))||14)*scale)+"px");
- node.querySelectorAll(".price").forEach(x=>x.style.fontSize=Math.max(8,Math.min(18,n(val("priceSize"))||10)*scale)+"px");
- node.querySelectorAll(".emoji").forEach(x=>x.style.fontSize=Math.max(14,Math.min(30,18*scale))+"px");
- node.querySelectorAll(".details span").forEach(x=>x.style.fontSize=Math.max(3.5,Math.min(7,4.5*scale))+"px");
- node.querySelectorAll(".topline").forEach(x=>x.style.fontSize=Math.max(3.5,Math.min(6,4*scale))+"px");
- node.querySelectorAll(".metaRow").forEach(x=>x.style.fontSize=Math.max(3.5,Math.min(6,4*scale))+"px");
+ // Aplicando os tamanhos individuais configurados pelo usuário
+ node.querySelectorAll(".name").forEach(x=>x.style.fontSize=(n(val("nameSize"))*scale)+"px");
+ node.querySelectorAll(".price").forEach(x=>x.style.fontSize=(n(val("priceSize"))*scale)+"px");
+ node.querySelectorAll(".emoji").forEach(x=>x.style.fontSize=(n(val("emojiSize"))*scale)+"px");
+ node.querySelectorAll(".weight").forEach(x=>x.style.fontSize=(n(val("weightSize"))*scale)+"px");
+ node.querySelectorAll(".details").forEach(x=>x.style.fontSize=(n(val("detailsSize"))*scale)+"px");
+ node.querySelectorAll(".topline").forEach(x=>x.style.fontSize=(Math.max(3, n(val("weightSize"))*0.8)*scale)+"px");
  
  if(el("cuts").checked && L){let c=document.createElement("div");c.className="cut";node.appendChild(c)}
  return node;
@@ -449,24 +479,22 @@ function renderPreview(){
     el("sheetInfo").textContent = "Visualizando Etiqueta Única (Escala Ampliada)";
     if(!list.length) { el("preview").innerHTML = "<p>Nenhum produto selecionado.</p>"; return; }
     
-    // Cria um container que simula a proporção exata da etiqueta
     let w = n(val("w")), h = n(val("h"));
     let wrapper = document.createElement("div");
     wrapper.className = "single-preview-wrapper";
-    wrapper.style.width = "300px"; // Tamanho fixo na tela
-    wrapper.style.height = (300 * (h/w)) + "px"; // Altura proporcional
+    wrapper.style.width = "300px";
+    wrapper.style.height = (300 * (h/w)) + "px";
     wrapper.style.position = "relative";
     wrapper.style.background = "#fff";
     wrapper.style.boxShadow = "0 10px 30px rgba(0,0,0,0.2)";
     wrapper.style.borderRadius = "4px";
     wrapper.style.margin = "20px auto";
+    wrapper.style.overflow = "hidden";
     
-    // Passa L como null para não usar posicionamento absoluto da folha A4
     let node = buildLabelNode(list[0], null); 
     wrapper.appendChild(node);
     el("preview").appendChild(wrapper);
     
-    // Adiciona informações de tamanho
     let info = document.createElement("div");
     info.className = "pagecaption";
     info.textContent = `Proporção: ${w}mm × ${h}mm`;
@@ -509,7 +537,16 @@ function saveModel(){let name=val("modelName").trim();if(!name)return alert("Dig
 function renderModels(){el("modelList").innerHTML='<option value="">Selecione</option>'+models.map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join("")}
 function loadModel(){let m=models.find(x=>x.id==val("modelList"));if(!m)return alert("Selecione um modelo.");applyState(m.state)}
 function deleteModel(){let id=Number(val("modelList"));if(!id)return;models=models.filter(m=>m.id!==id);save();renderModels();updateStats()}
-function resetDesign(){el("kind").value="product";el("w").value=50;el("h").value=30;el("mx").value=5;el("my").value=7;el("gx").value=2;el("gy").value=2;el("copies").value=1;el("fillSheet").checked=true;el("scope").value="one";el("accent").value="#819477";el("paper").value="#fffdf7";el("ink").value="#292f29";el("priceColor").value="#55764f";el("frameStyle").value="ornate";renderPreview()}
+function resetDesign(){
+  el("kind").value="product"; el("w").value=50; el("h").value=30; el("mx").value=5; el("my").value=7; el("gx").value=2; el("gy").value=2; 
+  el("copies").value=1; el("fillSheet").checked=true; el("scope").value="one"; el("accent").value="#819477"; el("paper").value="#fffdf7"; el("frameStyle").value="ornate";
+  el("nameSize").value=14; el("nameColor").value="#29332d";
+  el("emojiSize").value=18;
+  el("weightSize").value=4.5; el("weightColor").value="#29332d";
+  el("priceSize").value=9; el("priceColor").value="#55764f";
+  el("detailsSize").value=3; el("detailsColor").value="#718078";
+  renderPreview();
+}
 function backup(){let data={products,models,settings};let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});let a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="sabor-d-plus-backup.json";a.click();URL.revokeObjectURL(a.href)}
 function restoreBackup(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!Array.isArray(d.products))throw 0;products=d.products;models=d.models||[];settings=d.settings||settings;save();location.reload()}catch{alert("Backup inválido.")}};r.readAsText(f)}
 function init(){renderProducts();renderModels();initSettings();fillCalc();calculate();loadProductLabel();renderPreview()}
