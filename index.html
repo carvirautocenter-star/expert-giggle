@@ -1,617 +1,449 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sabor D+ | Estúdio de Etiquetas</title>
+<meta name="theme-color" content="#26352d">
+<title>Sabor D+ | Estúdio Gourmet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-:root{
-  --primary:#e87924;--dark:#20252b;--bg:#f3f5f8;
-  --card:#fff;--muted:#718096;--line:#e3e7ed;
-  --green:#16865c;--radius:14px
+:root{--ink:#29332d;--muted:#718078;--line:#e2e8e2;--paper:#fffdf7;--green:#536d54;--gold:#b68a4c;--red:#a94e3b;--bg:#f2f5f1}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 Inter,Arial,sans-serif}
+header{background:linear-gradient(120deg,#24352c,#405b48);color:#fff;padding:18px 4%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}.mark{width:48px;height:48px;border-radius:15px;background:#d8b77d;color:#26352d;display:grid;place-items:center;font-size:25px}.brand h1{margin:0;font:700 23px Georgia,serif;letter-spacing:.4px}.brand small{color:#dce5dc}
+button,.btn{border:0;border-radius:9px;padding:10px 14px;background:var(--green);color:#fff;font-weight:700;cursor:pointer}button:hover{filter:brightness(.95)}button.light{background:#edf1eb;color:#314238}button.gold{background:#b68a4c;color:#fff}button.red{background:#a94e3b}
+nav{display:flex;gap:7px;padding:11px 4%;background:#fff;border-bottom:1px solid var(--line);overflow:auto}nav button{white-space:nowrap;background:#edf1eb;color:#314238}nav button.active{background:#344d3a;color:white}
+main{max-width:1500px;margin:auto;padding:20px 4%}.tab{display:none}.tab.active{display:block}
+h2{font:700 23px Georgia,serif;margin:0 0 15px}h3{font-size:15px;margin:0 0 12px}.muted{color:var(--muted);font-size:12px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:13px}
+.stat{font-size:25px;font-weight:800;margin-top:5px}.row{display:flex;gap:10px;align-items:end;flex-wrap:wrap}.row>*{flex:1;min-width:0}
+label{display:block;font-size:12px;font-weight:700;color:#526158;margin:10px 0 5px}input,select,textarea{width:100%;padding:10px;border:1px solid #d7dfd7;border-radius:8px;background:#fff;color:#26352d;font:14px Arial}input[type=color]{height:39px;padding:3px}input[type=checkbox]{width:auto}textarea{min-height:65px}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:680px;font-size:13px}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}th{background:#f5f7f3;color:#56645a}
+.note{background:#fff8e9;border:1px solid #efdfbd;border-radius:10px;padding:11px;color:#665536;font-size:12px;margin:12px 0}
+.studio{display:grid;grid-template-columns:minmax(280px,370px) minmax(0,1fr);gap:16px;align-items:start}.editor{max-height:calc(100vh - 35px);overflow:auto;position:sticky;top:10px}
+.preview{background:#dfe5df;padding:14px;border-radius:14px;overflow:auto}.sheet{width:min(100%,794px);aspect-ratio:210/297;background:white;margin:0 auto 15px;position:relative;box-shadow:0 4px 18px #1b2a201f;overflow:hidden}.sheet-inner{position:absolute;inset:0}
+.sheet-grid{position:absolute;display:grid;align-content:start;justify-content:start}
+
+/* --- DESIGN BLINDADO PARA 50x30mm --- */
+.label{
+    position:absolute;
+    overflow:hidden;
+    background:var(--paper);
+    color:var(--ink);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:space-between;
+    padding: 2px 3px; /* Margem interna mínima */
+    font-family:'Playfair Display', Georgia, serif;
+    box-sizing:border-box;
+    border-radius: 4px;
 }
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--dark);font-family:Arial,Helvetica,sans-serif}
-header{background:linear-gradient(120deg,#20252b,#39434c);color:white;padding:20px 4%;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:12px}
-.brandMark{width:46px;height:46px;border-radius:13px;background:var(--primary);display:grid;place-items:center;font-size:25px}
-.brand h1{font-size:22px;margin:0}.brand small{color:#cbd5e0}
-header button{background:#fff;color:#252b32}
-nav{display:flex;gap:7px;padding:12px 4%;background:white;border-bottom:1px solid var(--line);overflow:auto}
-nav button{white-space:nowrap}
-button,.btn{border:0;border-radius:9px;padding:10px 14px;background:var(--primary);color:white;font-weight:700;cursor:pointer;font-size:13px}
-button:hover{filter:brightness(.96)}
-button.secondary{background:#e9edf2;color:#333}
-button.dark{background:#303943}
-button.green{background:var(--green)}
-button.danger{background:#c94343}
-button.small{padding:7px 10px;font-size:12px}
-.tab{display:none;padding:22px 4%;max-width:1500px;margin:auto}
-.tab.active{display:block}
-h2{font-size:21px;margin:0 0 16px}
-h3{font-size:15px;margin:0 0 12px}
-.muted{color:var(--muted);font-size:12px;line-height:1.5}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:17px;margin-bottom:15px}
-.stat{font-size:25px;font-weight:800;margin-top:8px}
-label{display:block;font-size:12px;font-weight:700;margin:10px 0 5px;color:#46515d}
-input,select,textarea{width:100%;border:1px solid #d8dee7;border-radius:8px;padding:10px;background:white;color:#252b32;font:14px Arial}
-input[type=checkbox]{width:auto}
-textarea{min-height:70px;resize:vertical}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.row>*{flex:1}
-.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
-.tableWrap{overflow:auto}
-table{border-collapse:collapse;width:100%;font-size:13px;min-width:720px}
-th,td{padding:10px 9px;text-align:left;border-bottom:1px solid var(--line)}
-th{background:#f6f7f9;color:#596574}
-td strong{color:#20252b}
-.price{font-weight:800;color:var(--green)}
-.pill{background:#fff1e5;color:#a84c0b;padding:4px 8px;border-radius:30px;font-size:11px}
-.editorGrid{display:grid;grid-template-columns:minmax(280px,390px) minmax(0,1fr);gap:18px;align-items:start}
-.sticky{position:sticky;top:12px}
-.previewArea{background:#dfe4e9;padding:16px;border-radius:14px;overflow:auto}
-.sheet{width:100%;max-width:794px;aspect-ratio:210/297;background:white;margin:auto;box-shadow:0 5px 22px #0002;position:relative;overflow:hidden}
-.sheetInner{position:absolute;inset:0}
-.labelGrid{position:absolute;display:grid;align-content:start;justify-content:start}
-.label{position:relative;overflow:hidden;background:white;border:1px solid #c8c8c8;color:#222;display:flex;flex-direction:column;justify-content:space-between;padding:4%;font-family:Arial,sans-serif}
-.label .logo{max-width:30%;max-height:24%;object-fit:contain;align-self:flex-start}
-.label .productImage{max-width:30%;max-height:35%;object-fit:contain;align-self:center}
-.label .emoji{font-size:1.5em;line-height:1}
-.label .name{font-size:1.15em;font-weight:900;line-height:1.05;overflow-wrap:anywhere}
-.label .weight{font-size:.75em;font-weight:bold}
-.label .priceTag{font-size:1.25em;font-weight:900;color:#16865c}
-.label .details{font-size:.58em;line-height:1.25;overflow-wrap:anywhere}
-.label .slogan{font-size:.65em;font-weight:bold}
-.label.priceLabel{justify-content:center;text-align:center;align-items:center}
-.label.priceLabel .name{font-size:1.3em}
-.label.priceLabel .priceTag{font-size:2em}
-.label.sealLabel{border-radius:20px;justify-content:center;align-items:center;text-align:center}
-.label.sealLabel .name{font-size:1.05em}
-.cut{position:absolute;inset:-1px;pointer-events:none}
-.cut:before,.cut:after{content:"";position:absolute;width:7px;height:7px;border-color:#555;border-style:solid}
-.cut:before{top:0;left:0;border-width:1px 0 0 1px}
-.cut:after{right:0;bottom:0;border-width:0 1px 1px 0}
-.previewCaption{text-align:center;font-size:11px;color:#65717e;margin:9px}
-.productIcon{font-size:20px}
-.help{background:#fff8e8;border:1px solid #f4dfb8;border-radius:10px;padding:11px;font-size:12px;line-height:1.5;margin:12px 0}
-.hidden{display:none!important}
-@media(max-width:850px){.editorGrid{grid-template-columns:1fr}.sticky{position:static}.tab{padding:15px 3%}}
+
+.label .frame{
+    position:absolute;
+    inset:1.5px; /* Moldura extremamente fina */
+    border:1px solid var(--accent);
+    border-radius:3px;
+    pointer-events:none;
+    z-index:0;
+    box-shadow: inset 0 0 0 1px var(--paper), inset 0 0 0 1.5px var(--accent);
+}
+
+.label .frame:before,.label .frame:after{
+    content:"✦";
+    position:absolute;
+    color:var(--accent);
+    background:var(--paper);
+    font-size:5px;
+    padding:0 1px;
+    line-height:1;
+}
+.label .frame:before{top:-3px;left:50%;transform:translateX(-50%)}
+.label .frame:after{bottom:-3px;left:50%;transform:translateX(-50%)}
+
+.label .topline{
+    font:700 4px/1 Arial,sans-serif;
+    letter-spacing:0.5px;
+    text-align:center;
+    color:var(--accent);
+    z-index:1;
+    text-transform:uppercase;
+    flex-shrink: 0;
+    width: 100%;
+    height: 6px; /* Altura fixa para não empurrar */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.label .logoimg{
+    display:block;
+    max-width:30%;
+    max-height:10px;
+    object-fit:contain;
+    z-index:1;
+    flex-shrink: 0;
+}
+
+.label .name{
+    font-family:'Great Vibes', cursive;
+    font-weight:400;
+    text-align:center;
+    line-height:1;
+    z-index:1;
+    width:100%;
+    flex-shrink: 0;
+    height: 20%; /* Trava o nome em 20% do tamanho */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.label .artrow{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-grow:1; /* Emoji/Imagem pega o espaço restante */
+    min-height: 12px; /* GARANTE que a imagem/emoji apareça */
+    width:100%;
+    z-index:1;
+    overflow: hidden;
+}
+
+.label .artrow img{
+    max-width:90%;
+    max-height:100%;
+    object-fit:contain;
+}
+
+.label .emoji{
+    font-family:"Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji",sans-serif;
+    line-height:0.8;
+    display:block;
+    text-align:center;
+}
+
+.label .bottom-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    z-index: 1;
+    flex-shrink: 0; /* Impede que a parte de baixo desapareça */
+}
+
+.label .metaRow{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:2px;
+    width:100%;
+    font:700 4.5px/1 Arial,sans-serif;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    padding-top: 1px;
+    margin-top: 1px;
+}
+.label .weight{text-align:left;}
+.label .price{text-align:right;font:800 8px/1 Arial,sans-serif;color:var(--price);white-space:nowrap;}
+
+.label .details{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    font:3.5px/1.1 Arial,sans-serif;
+    overflow:hidden;
+    width:100%;
+    max-height: 25%; /* Não deixa os detalhes engolirem a etiqueta */
+}
+.label .details span{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+.label .slogan{
+    text-align:center;
+    font:italic 4px/1 'Playfair Display', Georgia, serif;
+    color:var(--accent);
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    width:100%;
+    margin-top:1px;
+}
+
+/* Ajustes Preço e Lacre */
+.label.price-label, .label.seal-label {
+    justify-content: center;
+    gap: 2px;
+    text-align: center;
+}
+.label.price-label .name { font-family: 'Playfair Display', serif; font-weight: 700; height: auto;}
+.label.price-label .price { font-size: 14px; text-align: center; }
+.label.seal-label { border-radius: 12px; }
+.label.seal-label .name { font-family: 'Great Vibes', cursive; }
+
+.cut{position:absolute;inset:0;pointer-events:none}.cut:before,.cut:after{content:"";position:absolute;width:7px;height:7px;border-color:#68736a;border-style:solid}.cut:before{left:0;top:0;border-width:1px 0 0 1px}.cut:after{right:0;bottom:0;border-width:0 1px 1px 0}
+.pagecaption{text-align:center;color:#647168;font-size:11px;margin:-6px 0 12px}.hidden{display:none!important}
+@media(max-width:850px){main{padding:15px 3%}.studio{grid-template-columns:1fr}.editor{position:static;max-height:none}.preview{padding:8px}.sheet{width:100%;max-width:100%}}
 @media print{
-  @page{size:A4 portrait;margin:0}
-  html,body{width:210mm;height:297mm;margin:0!important;padding:0!important;background:white!important}
-  body *{visibility:hidden!important}
-  #printRoot,#printRoot *{visibility:visible!important}
-  #printRoot{display:block!important;position:absolute;left:0;top:0;width:210mm;height:297mm;margin:0;padding:0}
-  #printRoot .sheet{width:210mm!important;height:297mm!important;max-width:none!important;aspect-ratio:auto!important;box-shadow:none!important}
-  #printRoot .sheetInner{inset:0}
-  #printRoot .labelGrid{transform:none!important}
-  #printRoot .label{print-color-adjust:exact;-webkit-print-color-adjust:exact}
-  .cut{display:block}
+ @page{size:A4 portrait;margin:0}
+ html,body{margin:0!important;padding:0!important;width:210mm;background:#fff!important}
+ body *{visibility:hidden!important}
+ #printRoot,#printRoot *{visibility:visible!important}
+ #printRoot{display:block!important;position:absolute;left:0;top:0;width:210mm}
+ #printRoot .sheet{width:210mm!important;height:297mm!important;max-width:none!important;aspect-ratio:auto!important;box-shadow:none!important;margin:0!important;page-break-after:always;break-after:page}
+ #printRoot .sheet:last-child{page-break-after:auto;break-after:auto}
+ #printRoot .sheet-inner{inset:0}
+ #printRoot .label{print-color-adjust:exact;-webkit-print-color-adjust:exact}
 }
 </style>
 </head>
 <body>
-
 <header>
-  <div class="brand">
-    <div class="brandMark">🌶️</div>
-    <div><h1>Sabor D+</h1><small>Gestão de produtos • Kits • Estúdio de etiquetas</small></div>
-  </div>
-  <div class="row" style="flex:0 1 auto">
-    <button class="secondary" onclick="exportBackup()">⬇ Backup</button>
-    <button class="secondary" onclick="document.getElementById('backupFile').click()">⬆ Restaurar</button>
-    <input id="backupFile" type="file" accept=".json" class="hidden" onchange="importBackup(event)">
-  </div>
+ <div class="brand"><div class="mark">✿</div><div><h1>Sabor D+</h1><small>Empório de temperos • Estúdio de etiquetas</small></div></div>
+ <div class="actions"><button class="light" onclick="backup()">Exportar backup</button><button class="light" onclick="document.getElementById('restore').click()">Restaurar backup</button><input id="restore" type="file" accept=".json" class="hidden" onchange="restoreBackup(event)"></div>
 </header>
-
 <nav>
-  <button class="dark" onclick="showTab('dashboard',this)">Visão geral</button>
-  <button class="secondary" onclick="showTab('products',this)">Produtos e preços</button>
-  <button class="secondary" onclick="showTab('calculator',this)">Calculadora</button>
-  <button class="secondary" onclick="showTab('kits',this)">Montar kits</button>
-  <button class="secondary" onclick="showTab('studio',this)">Estúdio A4</button>
-  <button class="secondary" onclick="showTab('settings',this)">Configurações</button>
+ <button class="active" onclick="tab('home',this)">Visão geral</button><button onclick="tab('products',this)">Produtos e preços</button><button onclick="tab('calc',this)">Custos</button><button onclick="tab('studio',this)">Estúdio A4</button><button onclick="tab('settings',this)">Configurações</button>
 </nav>
-
-<section id="dashboard" class="tab active">
-  <h2>Visão geral</h2>
-  <div class="grid">
-    <div class="card"><div class="muted">Produtos cadastrados</div><div class="stat" id="totalProducts">34</div></div>
-    <div class="card"><div class="muted">Modelos salvos</div><div class="stat" id="totalModels">0</div></div>
-    <div class="card"><div class="muted">Custo adicional por pote</div><div class="stat" id="packCost">R$ 2,10</div></div>
-    <div class="card"><div class="muted">Marca</div><div class="stat">Sabor D+</div></div>
-  </div>
-  <div class="card">
-    <h3>Comece por aqui</h3>
-    <p class="muted">Cadastre seus produtos, confira os custos e monte suas etiquetas. Na aba Estúdio A4 você escolhe o formato, personaliza o visual e confere a folha antes de imprimir.</p>
-    <div class="actions">
-      <button onclick="showTab('products')">Gerenciar produtos</button>
-      <button onclick="showTab('studio')">Criar etiquetas</button>
-      <button class="secondary" onclick="showTab('kits')">Montar um kit</button>
-    </div>
-  </div>
-  <div class="card">
-    <h3>Orientações para impressão</h3>
-    <ul class="muted">
-      <li>Use papel A4 e configure a impressora para tamanho real / escala 100%.</li>
-      <li>Desative a opção “ajustar à página” no diálogo de impressão.</li>
-      <li>Faça primeiro um teste em papel comum para conferir o encaixe no pote.</li>
-      <li>Confira se o papel fotográfico escolhido é compatível com sua Canon 3111.</li>
-    </ul>
-  </div>
+<main>
+<section id="home" class="tab active">
+ <h2>Central Sabor D+</h2><div class="grid">
+ <div class="card"><div class="muted">Produtos cadastrados</div><div class="stat" id="countProducts">34</div></div>
+ <div class="card"><div class="muted">Modelos salvos</div><div class="stat" id="countModels">0</div></div>
+ <div class="card"><div class="muted">Embalagem estimada por pote</div><div class="stat" id="packTotal">R$ 2,10</div></div>
+ </div>
+ <div class="card"><h3>Fluxo de produção</h3><p class="muted">1. Confira os custos e preços. 2. Abra o Estúdio A4. 3. Escolha o produto e personalize a etiqueta. 4. Confira todas as páginas e imprima em escala real.</p><button onclick="tab('studio')">Criar etiquetas</button></div>
+ <div class="note">A prévia é proporcional. Para confirmar o tamanho físico, imprima uma página de teste em papel comum e meça com uma régua antes de usar o papel fotográfico.</div>
 </section>
 
 <section id="products" class="tab">
-  <h2>Produtos e preços</h2>
-  <div class="card">
-    <div class="row">
-      <div><label>Pesquisar produto</label><input id="productSearch" placeholder="Digite o nome..." oninput="renderProducts()"></div>
-      <div style="flex:0 0 auto;align-self:end"><button onclick="newProduct()">＋ Novo produto</button></div>
-    </div>
-  </div>
-  <div class="card tableWrap">
-    <table>
-      <thead><tr><th>Ícone</th><th>Produto</th><th>Custo/kg</th><th>Preço 50g</th><th>Custo/pote</th><th>Sobra bruta/pote</th><th>Ações</th></tr></thead>
-      <tbody id="productRows"></tbody>
-    </table>
-  </div>
-  <div class="card hidden" id="productEditor">
-    <h3 id="productEditorTitle">Editar produto</h3>
-    <input id="editId" type="hidden">
-    <div class="row">
-      <div><label>Nome</label><input id="editName"></div>
-      <div><label>Emoji / ícone</label><input id="editEmoji" maxlength="8" placeholder="🌶️"></div>
-    </div>
-    <div class="row">
-      <div><label>Custo de compra por kg (R$)</label><input id="editCost" inputmode="decimal" oninput="moneyMask(this)"></div>
-      <div><label>Preço de venda por pote (R$)</label><input id="editPrice" inputmode="decimal" oninput="moneyMask(this)"></div>
-    </div>
-    <label>Imagem do produto (opcional)</label><input id="editImage" type="file" accept="image/*">
-    <div class="actions">
-      <button onclick="saveProduct()">Salvar produto</button>
-      <button class="secondary" onclick="closeProductEditor()">Cancelar</button>
-    </div>
-  </div>
+ <h2>Produtos e preços</h2><div class="card"><div class="row"><div><label>Buscar</label><input id="search" placeholder="Nome do produto..." oninput="renderProducts()"></div><div style="flex:0 0 auto"><button onclick="editProduct()">+ Novo produto</button></div></div></div>
+ <div class="card tablewrap"><table><thead><tr><th>Ícone</th><th>Produto</th><th>Custo/kg</th><th>Preço 50 g</th><th>Custo estimado/pote</th><th>Sobra bruta</th><th></th></tr></thead><tbody id="productsBody"></tbody></table></div>
+ <div class="card hidden" id="productForm"><h3 id="formTitle">Produto</h3><input id="pid" type="hidden"><div class="row"><div><label>Nome</label><input id="pname"></div><div><label>Emoji</label><input id="pemoji" maxlength="8"></div></div><div class="row"><div><label>Custo por kg (R$)</label><input id="pcost" inputmode="decimal"></div><div><label>Preço de venda (R$)</label><input id="pprice" inputmode="decimal"></div></div><div class="actions"><button onclick="saveProduct()">Salvar</button><button class="light" onclick="closeProduct()">Cancelar</button></div></div>
 </section>
 
-<section id="calculator" class="tab">
-  <h2>Calculadora de custos e margem</h2>
-  <div class="grid">
-    <div class="card">
-      <label>Produto</label><select id="calcProduct" onchange="calculate()"></select>
-      <label>Quantidade comprada (kg)</label><input id="calcKg" value="1" inputmode="decimal" oninput="calculate()">
-      <label>Preço de compra por kg (R$)</label><input id="calcCost" inputmode="decimal" oninput="moneyMask(this);calculate()">
-      <label>Preço de venda por pote (R$)</label><input id="calcPrice" inputmode="decimal" oninput="moneyMask(this);calculate()">
-      <label>Quantidade de potes (50 g)</label><input id="calcQty" value="20" inputmode="numeric" oninput="calculate()">
-    </div>
-    <div class="card">
-      <h3>Resultado estimado</h3>
-      <div class="muted">Custo total da matéria-prima</div><div class="stat" id="rRaw">R$ 0,00</div>
-      <div class="muted">Custo total de embalagens</div><div class="stat" id="rPack">R$ 0,00</div>
-      <div class="muted">Custo total estimado</div><div class="stat" id="rTotal">R$ 0,00</div>
-      <div class="muted">Faturamento potencial</div><div class="stat" id="rRevenue">R$ 0,00</div>
-      <div class="muted">Sobra bruta estimada</div><div class="stat price" id="rProfit">R$ 0,00</div>
-      <p class="muted" id="rNote"></p>
-    </div>
-  </div>
-  <div class="help">A sobra apresentada é uma estimativa bruta. Não desconta impostos, taxas, frete, mão de obra, comissões ou despesas fixas. O cálculo padrão considera 50 g por pote.</div>
-</section>
-
-<section id="kits" class="tab">
-  <h2>Montagem de kits</h2>
-  <div class="grid">
-    <div class="card">
-      <label>Nome do kit</label><input id="kitName" value="Kit Sabor D+">
-      <label>Adicionar produto</label><select id="kitProduct"></select>
-      <label>Quantidade desse produto</label><input id="kitQuantity" type="number" min="1" value="1">
-      <button onclick="addKitItem()">Adicionar ao kit</button>
-      <div id="kitItems" style="margin-top:14px"></div>
-    </div>
-    <div class="card">
-      <h3>Resumo do kit</h3>
-      <div class="muted">Custo estimado</div><div class="stat" id="kitCost">R$ 0,00</div>
-      <div class="muted">Preço sugerido (soma dos preços individuais)</div><div class="stat" id="kitSuggested">R$ 0,00</div>
-      <label>Preço de venda do kit (R$)</label><input id="kitSale" value="0,00" oninput="moneyMask(this);renderKit()">
-      <div class="muted">Sobra bruta estimada</div><div class="stat price" id="kitProfit">R$ 0,00</div>
-      <div class="actions"><button onclick="saveKit()">Salvar kit</button></div>
-    </div>
-  </div>
-  <div class="card"><h3>Kits salvos</h3><div id="savedKits" class="muted">Nenhum kit salvo.</div></div>
+<section id="calc" class="tab">
+ <h2>Calculadora de custos</h2><div class="grid"><div class="card">
+ <label>Produto</label><select id="calcProduct" onchange="fillCalc()"></select>
+ <label>Quantidade comprada (kg)</label><input id="kg" value="1" oninput="calculate()">
+ <label>Custo por kg (R$)</label><input id="costKg" value="13,25" oninput="calculate()">
+ <label>Preço por pote (R$)</label><input id="salePrice" value="5,99" oninput="calculate()">
+ <label>Quantidade de potes produzidos</label><input id="qty" value="20" oninput="calculate()">
+ </div><div class="card"><h3>Resultado</h3><p class="muted">Matéria-prima</p><div class="stat" id="rawCost">R$ 0,00</div><p class="muted">Embalagens</p><div class="stat" id="packCost">R$ 0,00</div><p class="muted">Faturamento estimado</p><div class="stat" id="revenue">R$ 0,00</div><p class="muted">Sobra bruta estimada</p><div class="stat" id="gross">R$ 0,00</div></div></div>
+ <div class="note">A sobra bruta não desconta impostos, frete, taxas, mão de obra, comissões ou despesas fixas. O rendimento teórico é 20 potes de 50 g por kg, antes de perdas.</div>
 </section>
 
 <section id="studio" class="tab">
-  <h2>Estúdio de etiquetas • A4</h2>
-  <div class="help"><strong>Pré-visualização:</strong> a folha abaixo representa uma página A4. Ajuste as dimensões, margens e espaçamento. O número de etiquetas por página é calculado automaticamente. Para impressão física, use escala 100% e confira as medidas com uma régua.</div>
-
-  <div class="editorGrid">
-    <div class="card sticky">
-      <h3>1. Formato e organização</h3>
-      <label>Tipo de etiqueta</label>
-      <select id="labelType" onchange="changeLabelType()">
-        <option value="product">Etiqueta do produto</option>
-        <option value="price">Etiqueta de preço</option>
-        <option value="seal">Lacre / adesivo de fechamento</option>
-      </select>
-      <div class="row">
-        <div><label>Largura (mm)</label><input id="labelW" type="number" value="63" min="10" max="200" oninput="updatePreview()"></div>
-        <div><label>Altura (mm)</label><input id="labelH" type="number" value="38" min="10" max="280" oninput="updatePreview()"></div>
-      </div>
-      <div class="row">
-        <div><label>Margem esquerda (mm)</label><input id="marginX" type="number" value="8" min="0" max="30" oninput="updatePreview()"></div>
-        <div><label>Margem superior (mm)</label><input id="marginY" type="number" value="8" min="0" max="30" oninput="updatePreview()"></div>
-      </div>
-      <div class="row">
-        <div><label>Espaço horizontal (mm)</label><input id="gapX" type="number" value="2" min="0" max="15" oninput="updatePreview()"></div>
-        <div><label>Espaço vertical (mm)</label><input id="gapY" type="number" value="2" min="0" max="15" oninput="updatePreview()"></div>
-      </div>
-      <div class="row">
-        <div><label>Cópias por produto</label><input id="copies" type="number" value="1" min="1" max="300" oninput="updatePreview()"></div>
-        <div><label>Repetir produto</label><select id="repeatProduct" onchange="updatePreview()"><option value="one">Produto selecionado</option><option value="all">Todos os produtos</option></select></div>
-      </div>
-      <label><input id="showCuts" type="checkbox" checked onchange="updatePreview()"> Mostrar marcas de corte</label>
-
-      <hr style="border:0;border-top:1px solid var(--line);margin:17px 0">
-      <h3>2. Conteúdo da etiqueta</h3>
-      <label>Produto</label><select id="labelProduct" onchange="loadLabelProduct()"></select>
-      <label>Nome / título (editável)</label><input id="labelName" value="Colorau">
-      <div class="row">
-        <div><label>Ícone / emoji</label><input id="labelEmoji" value="🌶️" maxlength="8"></div>
-        <div><label>Peso / chamada</label><input id="labelWeight" value="50 g"></div>
-      </div>
-      <label>Preço exibido (R$)</label><input id="labelPrice" value="5,99" inputmode="decimal" oninput="moneyMask(this)">
-      <label><input id="showPrice" type="checkbox" checked> Mostrar preço</label>
-      <label>Texto promocional / slogan</label><input id="labelSlogan" placeholder="Sabor que faz a diferença!">
-      <label>Data de fabricação</label><input id="labelMade" type="date">
-      <label>Validade</label><input id="labelExpiry" type="date">
-      <label>Lote</label><input id="labelLot" placeholder="Ex.: L001">
-      <label>Contato / WhatsApp</label><input id="labelContact" placeholder="(83) 99999-9999">
-      <label>Fabricante / marca</label><input id="labelBrand" value="Sabor D+">
-      <label>Informações adicionais</label><textarea id="labelExtra" placeholder="Conservar em local seco e fresco."></textarea>
-
-      <hr style="border:0;border-top:1px solid var(--line);margin:17px 0">
-      <h3>3. Logo e imagens</h3>
-      <label>Logo da marca (opcional)</label><input id="logoUpload" type="file" accept="image/*" onchange="readImage(event,'logo')">
-      <div class="row">
-        <button class="secondary small" onclick="removeImage('logo')">Remover logo</button>
-        <span class="muted" id="logoStatus">Nenhuma logo carregada</span>
-      </div>
-      <label>Imagem do produto (opcional)</label><input id="productUpload" type="file" accept="image/*" onchange="readImage(event,'product')">
-      <div class="row">
-        <button class="secondary small" onclick="removeImage('product')">Remover imagem</button>
-        <span class="muted" id="productStatus">Nenhuma imagem carregada</span>
-      </div>
-
-      <hr style="border:0;border-top:1px solid var(--line);margin:17px 0">
-      <h3>4. Aparência</h3>
-      <div class="row">
-        <div><label>Cor de fundo</label><input id="labelBg" type="color" value="#ffffff"></div>
-        <div><label>Cor do texto</label><input id="labelColor" type="color" value="#222222"></div>
-        <div><label>Cor do preço</label><input id="labelPriceColor" type="color" value="#16865c"></div>
-      </div>
-      <div class="row">
-        <div><label>Tamanho do nome (px)</label><input id="fontName" type="number" value="13" min="5" max="40"></div>
-        <div><label>Tamanho do preço (px)</label><input id="fontPrice" type="number" value="16" min="5" max="50"></div>
-      </div>
-      <label>Alinhamento</label><select id="labelAlign"><option value="left">Esquerda</option><option value="center">Centralizado</option><option value="right">Direita</option></select>
-      <label>Formato do contorno</label><select id="labelBorder"><option value="solid">Contorno fino</option><option value="none">Sem contorno</option><option value="dashed">Tracejado</option></select>
-      <div class="actions">
-        <button onclick="updatePreview()">Atualizar prévia</button>
-        <button class="green" onclick="printLabels()">Imprimir A4</button>
-      </div>
-      <hr style="border:0;border-top:1px solid var(--line);margin:17px 0">
-      <h3>5. Salvar modelo</h3>
-      <label>Nome do modelo</label><input id="modelName" placeholder="Ex.: Etiqueta Colorau">
-      <div class="actions">
-        <button onclick="saveModel()">Salvar modelo</button>
-        <button class="secondary" onclick="resetStudio()">Restaurar padrão</button>
-      </div>
-      <label>Modelos salvos</label><select id="modelSelect"><option value="">Selecione um modelo</option></select>
-      <div class="actions">
-        <button class="secondary" onclick="loadModel()">Carregar modelo</button>
-        <button class="danger" onclick="deleteModel()">Excluir modelo</button>
-      </div>
-    </div>
-
-    <div>
-      <div class="card">
-        <div class="row">
-          <div><h3 style="margin:0">Visualização da folha A4</h3><div class="muted" id="sheetInfo">Calculando distribuição...</div></div>
-          <button class="green" onclick="printLabels()">🖨 Imprimir</button>
-        </div>
-      </div>
-      <div class="previewArea">
-        <div id="previewSheet" class="sheet"><div class="sheetInner" id="previewInner"></div></div>
-        <div class="previewCaption">A4 • 210 × 297 mm • Pré-visualização proporcional</div>
-      </div>
-    </div>
-  </div>
+ <h2>Estúdio gourmet • Etiquetas A4</h2>
+ <div class="note"><b>Atenção:</b> O tamanho de 50x30mm é muito pequeno. Para que todas as informações caibam, o sistema utiliza fontes minúsculas (3px a 8px). Recomendamos testar a impressão.</div>
+ <div class="studio">
+ <div class="card editor">
+  <h3>Formato e impressão</h3>
+  <label>Modelo de etiqueta</label><select id="kind" onchange="kindChange()"><option value="product">Produto gourmet</option><option value="price">Etiqueta de preço</option><option value="seal">Lacre</option></select>
+  <div class="row"><div><label>Largura (mm)</label><input id="w" type="number" min="15" max="200" value="50" oninput="renderPreview()"></div><div><label>Altura (mm)</label><input id="h" type="number" min="12" max="280" value="30" oninput="renderPreview()"></div></div>
+  <div class="row"><div><label>Margem lateral (mm)</label><input id="mx" type="number" min="0" max="30" value="5" oninput="renderPreview()"></div><div><label>Margem superior (mm)</label><input id="my" type="number" min="0" max="30" value="7" oninput="renderPreview()"></div></div>
+  <div class="row"><div><label>Espaço horizontal (mm)</label><input id="gx" type="number" min="0" max="15" value="2" oninput="renderPreview()"></div><div><label>Espaço vertical (mm)</label><input id="gy" type="number" min="0" max="15" value="2" oninput="renderPreview()"></div></div>
+  <label>Quantidade de cópias por produto</label><input id="copies" type="number" min="1" max="500" value="1" oninput="renderPreview()"><label><input id="fillSheet" type="checkbox" checked onchange="renderPreview()"> Preencher automaticamente a folha inteira</label>
+  <label>Imprimir</label><select id="scope" onchange="renderPreview()"><option value="one">Somente produto selecionado</option><option value="all">Todos os produtos cadastrados</option></select>
+  <label><input id="cuts" type="checkbox" checked onchange="renderPreview()"> Marcas de corte</label>
+  <hr style="border:0;border-top:1px solid #e2e8e2;margin:16px 0">
+  <h3>Produto e informações</h3>
+  <label>Produto cadastrado</label><select id="chosen" onchange="loadProductLabel()"></select>
+  <label>Nome exibido</label><input id="lname" value="Colorau" oninput="renderPreview()">
+  <div class="row"><div><label>Ícone / emoji</label><input id="emoji" value="🌶️" oninput="renderPreview()"></div><div><label>Peso líquido</label><input id="weight" value="50 g" oninput="renderPreview()"></div></div>
+  <label>Preço (R$)</label><input id="price" value="5,99" oninput="renderPreview()">
+  <label><input type="checkbox" id="showPrice" checked onchange="renderPreview()"> Exibir preço</label>
+  <label>Frase / chamada</label><input id="slogan" value="O toque especial da sua cozinha!" oninput="renderPreview()">
+  <label>Fabricação</label><input id="made" type="date" oninput="renderPreview()">
+  <label>Validade</label><input id="expiry" type="date" oninput="renderPreview()">
+  <label>Lote</label><input id="lot" placeholder="Ex.: SD-001" oninput="renderPreview()">
+  <label>Contato / WhatsApp</label><input id="contact" placeholder="(83) 99999-9999" oninput="renderPreview()">
+  <label>Conservação / informações</label><textarea id="extra" oninput="renderPreview()">Conservar em local seco e fresco.</textarea>
+  <hr style="border:0;border-top:1px solid #e2e8e2;margin:16px 0">
+  <h3>Identidade visual</h3>
+  <label>Logo Sabor D+ (opcional)</label><input type="file" id="logoFile" accept="image/*" onchange="imageUpload(event,'logo')"><div class="muted" id="logoState">Sem logo personalizada</div>
+  <label>Ilustração do ingrediente (opcional)</label><input type="file" id="artFile" accept="image/*" onchange="imageUpload(event,'art')"><div class="muted" id="artState">Será usado o emoji se não houver imagem</div>
+  <div class="row"><div><label>Cor da moldura</label><input id="accent" type="color" value="#819477" oninput="renderPreview()"></div><div><label>Fundo</label><input id="paper" type="color" value="#fffdf7" oninput="renderPreview()"></div></div>
+  <div class="row"><div><label>Texto</label><input id="ink" type="color" value="#292f29" oninput="renderPreview()"></div><div><label>Preço</label><input id="priceColor" type="color" value="#55764f" oninput="renderPreview()"></div></div>
+  <div class="row"><div><label>Fonte do nome (px)</label><input id="nameSize" type="number" value="14" min="6" max="36" oninput="renderPreview()"></div><div><label>Fonte do preço (px)</label><input id="priceSize" type="number" value="10" min="6" max="42" oninput="renderPreview()"></div></div>
+  <label>Alinhamento</label><select id="align" onchange="renderPreview()"><option value="center">Centralizado</option><option value="left">À esquerda</option><option value="right">À direita</option></select>
+  <label>Estilo da moldura</label><select id="frameStyle" onchange="renderPreview()"><option value="ornate">Ornamental (Gourmet)</option><option value="simple">Minimalista</option><option value="double">Dupla</option><option value="none">Sem moldura</option></select>
+  <hr style="border:0;border-top:1px solid #e2e8e2;margin:16px 0">
+  <h3>Modelos personalizados</h3>
+  <label>Nome do modelo</label><input id="modelName" placeholder="Ex.: Linha de pápricas">
+  <button onclick="saveModel()">Salvar modelo</button>
+  <label>Modelos salvos</label><select id="modelList"><option value="">Selecione</option></select>
+  <div class="actions"><button class="light" onclick="loadModel()">Carregar</button><button class="red" onclick="deleteModel()">Excluir</button></div>
+  <div class="actions"><button class="gold" onclick="printA4()">Imprimir todas as páginas</button><button class="light" onclick="resetDesign()">Restaurar design</button></div>
+ </div>
+ <div>
+  <div class="card"><div class="row"><div><h3 style="margin:0">Pré-visualização A4</h3><div class="muted" id="sheetInfo">Calculando...</div></div><button class="gold" onclick="printA4()">Imprimir A4</button></div></div>
+  <div class="preview" id="preview"></div>
+ </div>
+ </div>
 </section>
 
 <section id="settings" class="tab">
-  <h2>Configurações gerais</h2>
-  <div class="card">
-    <h3>Custos de embalagem por pote de 50 g</h3>
-    <div class="row">
-      <div><label>Pote + tampa (R$)</label><input id="costPot" value="1,50" oninput="moneyMask(this);saveSettings()"></div>
-      <div><label>Etiqueta frontal (R$)</label><input id="costLabel" value="0,20" oninput="moneyMask(this);saveSettings()"></div>
-    </div>
-    <div class="row">
-      <div><label>Lacre adesivo (R$)</label><input id="costSeal" value="0,15" oninput="moneyMask(this);saveSettings()"></div>
-      <div><label>Perdas / auxiliares (R$)</label><input id="costExtra" value="0,25" oninput="moneyMask(this);saveSettings()"></div>
-    </div>
-    <p class="muted">Total inicial estimado: R$ 2,10 por unidade. Você pode alterar esses valores conforme seus custos reais.</p>
-    <div class="stat" id="totalPackCost">R$ 2,10</div>
-  </div>
-  <div class="card">
-    <h3>Dados da marca</h3>
-    <label>Nome da marca</label><input id="companyName" value="Sabor D+">
-    <label>Contato padrão</label><input id="companyContact" placeholder="WhatsApp / telefone">
-    <label>Informação padrão de conservação</label><input id="companyStorage" value="Conservar em local seco e fresco.">
-    <button onclick="saveSettings()">Salvar configurações</button>
-  </div>
-  <div class="card">
-    <h3>Backup e segurança</h3>
-    <p class="muted">Os dados ficam armazenados no navegador deste aparelho. Exporte um backup JSON regularmente para não perder produtos, modelos e configurações.</p>
-    <button onclick="exportBackup()">Exportar backup completo</button>
-  </div>
+ <h2>Configurações</h2><div class="card"><h3>Custos de embalagem por pote</h3>
+ <div class="row"><div><label>Pote + tampa (R$)</label><input id="cPot" value="1,50" oninput="saveSettings()"></div><div><label>Etiqueta frontal (R$)</label><input id="cLabel" value="0,20" oninput="saveSettings()"></div></div>
+ <div class="row"><div><label>Lacre (R$)</label><input id="cSeal" value="0,15" oninput="saveSettings()"></div><div><label>Perdas e auxiliares (R$)</label><input id="cExtra" value="0,25" oninput="saveSettings()"></div></div><p class="muted">Valores iniciais totalizam R$ 2,10 por pote. Altere conforme seus custos reais.</p><div class="stat" id="settingsTotal">R$ 2,10</div></div>
+ <div class="card"><h3>Marca e contato padrão</h3><label>Nome da marca</label><input id="brandName" value="Sabor D+"><label>Contato padrão</label><input id="defaultContact"><label>Texto de conservação</label><input id="defaultStorage" value="Conservar em local seco e fresco."><button onclick="saveSettings()">Salvar configurações</button></div>
 </section>
-
+</main>
 <div id="printRoot" style="display:none"></div>
-
 <script>
-const initialProducts=[
-["Caldo de bacon",13.25,5.99,"🥓"],["Caldo de camarão",13.25,5.99,"🦐"],
-["Caldo de costela",13.25,5.99,"🍖"],["Caldo de galinha",13.25,5.99,"🍗"],
-["Caldo de legumes",13.25,5.99,"🥕"],["Caldo de peixe",13.25,5.99,"🐟"],
-["Caldo de carne",14.50,5.99,"🥩"],["Colorau",19.88,5.99,"🌶️"],
-["Cúrcuma em pó feculada",20.50,5.99,"🟡"],["Creme de cebola",21.25,5.99,"🧅"],
-["Tempero baiano",22.75,5.99,"🌶️"],["Páprica doce",23.38,5.99,"🫑"],
-["Páprica picante",23.38,5.99,"🌶️"],["Páprica defumada",25.50,6.99,"🔥"],
-["Curry",27.50,6.99,"🍛"],["Glutamato",27.50,6.99,"🧂"],
-["Alho em pó",30.00,6.99,"🧄"],["Tempero Ana Maria",31.75,6.99,"🌿"],
-["Lemon pepper",32.88,6.99,"🍋"],["Lemon pepper defumado",32.88,6.99,"🍋"],
-["Limão e ervas finas",36.78,6.99,"🍋"],["Tempero Pega Esposa",38.50,6.99,"❤️"],
-["Tempero para feijão",38.70,6.99,"🫘"],["Chimichurri com pimenta",43.98,8.99,"🌶️"],
-["Chimichurri sem pimenta",43.98,8.99,"🌿"],["Tempero Pega Marido",43.98,8.99,"❤️"],
-["Molho tártaro",44.15,8.99,"🥣"],["Tempero do Edu",44.65,8.99,"👨‍🍳"],
-["Canela em pó pura",47.75,8.99,"🟤"],["Salsa, cebola e alho",51.48,8.99,"🧄"],
-["Cebola em pó",58.00,8.99,"🧅"],["Vinagrete",68.98,8.99,"🥗"],
-["Condimento fumaça em pó",42.60,8.99,"🔥"],["Tempero do Chef",32.60,6.99,"👨‍🍳"]
-].map((p,i)=>({id:i+1,name:p[0],cost:p[1],price:p[2],emoji:p[3],image:""}));
-
-let products=load("sd_products",initialProducts);
-let settings=load("sd_settings",{pot:1.5,label:.2,seal:.15,extra:.25,company:"Sabor D+",contact:"",storage:"Conservar em local seco e fresco."});
-let models=load("sd_models",[]);
-let kits=load("sd_kits",[]);
-let kitCart=[];
-let logoData=load("sd_logo","");
-let productImageData="";
-let currentLabelType="product";
-
-function load(k,fallback){try{let v=localStorage.getItem(k);return v?JSON.parse(v):structuredClone(fallback)}catch(e){return fallback}}
-function persist(){localStorage.setItem("sd_products",JSON.stringify(products));localStorage.setItem("sd_settings",JSON.stringify(settings));localStorage.setItem("sd_models",JSON.stringify(models));localStorage.setItem("sd_kits",JSON.stringify(kits))}
-function money(v){return Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}
-function num(v){if(typeof v==="number")return v;let s=String(v??"").trim().replace(/[R$\s]/g,"");if(!s)return 0;if(s.includes(","))s=s.replace(/\./g,"").replace(",",".");return Number(s)||0}
-function moneyMask(el){let digits=el.value.replace(/\D/g,"");let n=Number(digits||0)/100;el.value=n.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}
+const seed=[
+["Caldo de bacon",13.25,5.99,"🥓"],["Caldo de camarão",13.25,5.99,"🦐"],["Caldo de costela",13.25,5.99,"🍖"],["Caldo de galinha",13.25,5.99,"🍗"],["Caldo de legumes",13.25,5.99,"🥕"],["Caldo de peixe",13.25,5.99,"🐟"],["Caldo de carne",14.50,5.99,"🥩"],["Colorau",19.88,5.99,"🌶️"],["Cúrcuma em pó feculada",20.50,5.99,"🟡"],["Creme de cebola",21.25,5.99,"🧅"],["Tempero baiano",22.75,5.99,"🌶️"],["Páprica doce",23.38,5.99,"🫑"],["Páprica picante",23.38,5.99,"🌶️"],["Páprica defumada",25.50,6.99,"🔥"],["Curry",27.50,6.99,"🍛"],["Glutamato",27.50,6.99,"🧂"],["Alho em pó",30,6.99,"🧄"],["Tempero Ana Maria",31.75,6.99,"🌿"],["Lemon pepper",32.88,6.99,"🍋"],["Lemon pepper defumado",32.88,6.99,"🍋"],["Limão e ervas finas",36.78,6.99,"🍋"],["Tempero Pega Esposa",38.50,6.99,"❤️"],["Tempero para feijão",38.70,6.99,"🫘"],["Chimichurri com pimenta",43.98,8.99,"🌶️"],["Chimichurri sem pimenta",43.98,8.99,"🌿"],["Tempero Pega Marido",43.98,8.99,"❤️"],["Molho tártaro",44.15,8.99,"🥣"],["Tempero do Edu",44.65,8.99,"👨‍🍳"],["Canela em pó pura",47.75,8.99,"🟤"],["Salsa, cebola e alho",51.48,8.99,"🧄"],["Cebola em pó",58,8.99,"🧅"],["Vinagrete",68.98,8.99,"🥗"],["Condimento fumaça em pó",42.60,8.99,"🔥"],["Tempero do Chef",32.60,6.99,"👨‍🍳"]
+].map((p,i)=>({id:i+1,name:p[0],cost:p[1],price:p[2],emoji:p[3]}));
+let products=get("sd6_products",seed),models=get("sd6_models",[]),settings=get("sd6_settings",{pot:1.5,label:.2,seal:.15,extra:.25,brand:"Sabor D+",contact:"",storage:"Conservar em local seco e fresco."}),logo="",art="";
+function get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}}
+function save(){localStorage.setItem("sd6_products",JSON.stringify(products));localStorage.setItem("sd6_models",JSON.stringify(models));localStorage.setItem("sd6_settings",JSON.stringify(settings))}
+function br(v){return Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}
+function n(v){let s=String(v??"").trim().replace(/[R$\s]/g,"");if(s.includes(","))s=s.replace(/\./g,"").replace(",",".");return Number(s)||0}
+function val(id){return document.getElementById(id).value}
+function el(id){return document.getElementById(id)}
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function packCost(){return Number(settings.pot)+Number(settings.label)+Number(settings.seal)+Number(settings.extra)}
-function byId(id){return products.find(p=>p.id==id)}
-function showTab(id,btn){document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll("nav button").forEach(x=>x.className="secondary");if(btn)btn.className="dark";if(id==="studio")updatePreview()}
-function updateDashboard(){document.getElementById("totalProducts").textContent=products.length;document.getElementById("totalModels").textContent=models.length;document.getElementById("packCost").textContent=money(packCost())}
-function renderProducts(){
- let q=(document.getElementById("productSearch").value||"").toLowerCase();
- let rows=products.filter(p=>p.name.toLowerCase().includes(q)).map(p=>{
- let c=p.cost/20+packCost();
- return `<tr><td class="productIcon">${esc(p.emoji||"")}</td><td><strong>${esc(p.name)}</strong></td><td>${money(p.cost)}</td><td>${money(p.price)}</td><td>${money(c)}</td><td class="price">${money(p.price-c)}</td><td><button class="small" onclick="editProduct(${p.id})">Editar</button> <button class="small danger" onclick="removeProduct(${p.id})">Excluir</button></td></tr>`
- }).join("");
- document.getElementById("productRows").innerHTML=rows||"<tr><td colspan='7'>Nenhum produto encontrado.</td></tr>";
- updateSelects();
+function pack(){return settings.pot+settings.label+settings.seal+settings.extra}
+function tab(id,btn){document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));el(id).classList.add("active");document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));if(btn)btn.classList.add("active");if(id==="studio")renderPreview()}
+function refreshSelects(){["calcProduct","chosen"].forEach(id=>{let old=val(id);el(id).innerHTML=products.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("");if(products.some(p=>p.id==old))el(id).value=old})}
+function renderProducts(){let q=(val("search")||"").toLowerCase();el("productsBody").innerHTML=products.filter(p=>p.name.toLowerCase().includes(q)).map(p=>{let c=p.cost/20+pack();return `<tr><td>${esc(p.emoji)}</td><td><b>${esc(p.name)}</b></td><td>${br(p.cost)}</td><td>${br(p.price)}</td><td>${br(c)}</td><td style="color:#27734a;font-weight:bold">${br(p.price-c)}</td><td><button onclick="editProduct(${p.id})">Editar</button> <button class="red" onclick="removeProduct(${p.id})">Excluir</button></td></tr>`}).join("");refreshSelects();updateStats()}
+function editProduct(id){let p=products.find(x=>x.id===id);el("productForm").classList.remove("hidden");el("formTitle").textContent=p?"Editar produto":"Novo produto";el("pid").value=p?.id||"";el("pname").value=p?.name||"";el("pemoji").value=p?.emoji||"🌿";el("pcost").value=p?.cost??"";el("pprice").value=p?.price??""}
+function closeProduct(){el("productForm").classList.add("hidden")}
+function saveProduct(){let name=val("pname").trim();if(!name)return alert("Informe o nome.");let id=Number(val("pid"))||Date.now(),p={id,name,emoji:val("pemoji")||"🌿",cost:n(val("pcost")),price:n(val("pprice"))};let i=products.findIndex(x=>x.id===id);if(i>=0)products[i]=p;else products.push(p);save();closeProduct();renderProducts()}
+function removeProduct(id){if(!confirm("Excluir produto?"))return;products=products.filter(p=>p.id!==id);save();renderProducts()}
+function fillCalc(){let p=products.find(x=>x.id==val("calcProduct"));if(p){el("costKg").value=p.cost;el("salePrice").value=p.price;calculate()}}
+function calculate(){let raw=n(val("kg"))*n(val("costKg")),qty=Math.max(0,n(val("qty"))),packCost=qty*pack(),rev=qty*n(val("salePrice"));el("rawCost").textContent=br(raw);el("packCost").textContent=br(packCost);el("revenue").textContent=br(rev);el("gross").textContent=br(rev-raw-packCost)}
+function updateStats(){el("countProducts").textContent=products.length;el("countModels").textContent=models.length;el("packTotal").textContent=br(pack())}
+function saveSettings(){settings={pot:n(val("cPot")),label:n(val("cLabel")),seal:n(val("cSeal")),extra:n(val("cExtra")),brand:val("brandName"),contact:val("defaultContact"),storage:val("defaultStorage")};save();el("settingsTotal").textContent=br(pack());updateStats();renderProducts();calculate()}
+function initSettings(){el("cPot").value=settings.pot;el("cLabel").value=settings.label;el("cSeal").value=settings.seal;el("cExtra").value=settings.extra;el("brandName").value=settings.brand;el("defaultContact").value=settings.contact;el("defaultStorage").value=settings.storage;el("contact").value=settings.contact;el("extra").value=settings.storage;el("settingsTotal").textContent=br(pack())}
+function loadProductLabel(){let p=products.find(x=>x.id==val("chosen"));if(!p)return;el("lname").value=p.name;el("emoji").value=p.emoji;el("price").value=p.price.toFixed(2).replace(".",",");renderPreview()}
+function kindChange(){let k=val("kind");if(k==="product"){el("w").value=50;el("h").value=30}else if(k==="price"){el("w").value=40;el("h").value=25}else{el("w").value=45;el("h").value=20}renderPreview()}
+function imageUpload(e,type){let f=e.target.files[0];if(!f)return;if(f.size>2*1024*1024){alert("Imagem máxima de 2 MB.");e.target.value="";return}let r=new FileReader();r.onload=()=>{if(type==="logo"){logo=r.result;el("logoState").textContent="Logo carregada"}else{art=r.result;el("artState").textContent="Ilustração carregada"}renderPreview()};r.readAsDataURL(f)}
+function state(){let ids=["kind","w","h","mx","my","gx","gy","copies","fillSheet","scope","cuts","chosen","lname","emoji","weight","price","showPrice","slogan","made","expiry","lot","contact","extra","accent","paper","ink","priceColor","nameSize","priceSize","align","frameStyle"];let o={};ids.forEach(id=>o[id]=el(id).type==="checkbox"?el(id).checked:val(id));o.logo=logo;o.art=art;return o}
+function applyState(o){Object.keys(o).forEach(id=>{if(el(id)){if(el(id).type==="checkbox")el(id).checked=o[id];else el(id).value=o[id]}});logo=o.logo||"";art=o.art||"";el("logoState").textContent=logo?"Logo carregada":"Sem logo personalizada";el("artState").textContent=art?"Ilustração carregada":"Será usado o emoji se não houver imagem";renderPreview()}
+function dateBR(v){if(!v)return "";let a=v.split("-");return a.length===3?`${a[2]}/${a[1]}/${a[0]}`:v}
+
+function labelMarkup(p){
+ let useCatalog=val("scope")==="all";
+ let name=useCatalog?p.name:val("lname"),emoji=useCatalog?p.emoji:val("emoji"),price=useCatalog?p.price:n(val("price")),kind=val("kind"),frame=val("frameStyle"),align=val("align");
+ let accent=val("accent"),paper=val("paper"),ink=val("ink"),priceColor=val("priceColor");
+ 
+ let logoHTML=logo?`<img class="logoimg" src="${logo}" alt="Logo">`:`<div class="topline">${esc(settings.brand||"SABOR D+")}</div>`;
+ 
+ let artHTML=art?`<img src="${art}" alt="Ilustração">`:`<span class="emoji">${esc(emoji||"🌿")}</span>`;
+ 
+ let contactText=val("contact")||settings.contact||"";
+ // Junta todas as informações em linhas curtas
+ let detailLines=[val("made")?`Fab: ${dateBR(val("made"))}`:"",val("expiry")?`Val: ${dateBR(val("expiry"))}`:"",val("lot")?`Lote: ${val("lot")}`:"",contactText?`Contato: ${contactText}`:"",val("extra")].filter(Boolean);
+ let details=detailLines.map(x=>`<span>${esc(x)}</span>`).join("");
+ 
+ let style=`--accent:${accent};--paper:${paper};--ink:${ink};--price:${priceColor};background:${paper};color:${ink};text-align:${align};border:${frame==="none"?"0":`1px solid ${accent}`}`;
+ 
+ let frameHTML=frame==="none"?"":`<div class="frame" style="${frame==="double"?"border-width:3px;border-style:double;":""}"></div>`;
+ if(frame==="simple")frameHTML=`<div class="frame" style="border-radius:4px; border-style:dashed; box-shadow:none;"></div>`;
+ 
+ if(kind==="price") return `<div class="label price-label" style="${style}">${frameHTML}${logoHTML}<div class="name">${esc(name)}</div><div class="price">${val("showPrice")?br(price):""}</div><div class="slogan">${esc(val("slogan"))}</div></div>`;
+ if(kind==="seal") return `<div class="label seal-label" style="${style}">${frameHTML}${logoHTML}<div class="name">${esc(val("slogan")||name)}</div><div class="emoji">${esc(emoji||"🌿")}</div><div class="topline">${esc(settings.brand||"SABOR D+")}</div></div>`;
+ 
+ return `<div class="label" style="${style}">
+    ${frameHTML}
+    ${logoHTML}
+    <div class="name">${esc(name)}</div>
+    <div class="artrow">${artHTML}</div>
+    <div class="bottom-info">
+        <div class="metaRow">
+            <span class="weight">${esc(val("weight"))}</span>
+            ${val("showPrice")?`<span class="price">${br(price)}</span>`:""}
+        </div>
+        ${details ? `<div class="details">${details}</div>` : ""}
+        ${val("slogan") ? `<div class="slogan">${esc(val("slogan"))}</div>` : ""}
+    </div>
+ </div>`;
 }
-function updateSelects(){
- ["calcProduct","kitProduct","labelProduct"].forEach(id=>{
- let el=document.getElementById(id),old=el.value;
- el.innerHTML=products.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("");
- if(products.some(p=>p.id==old))el.value=old;
- });
-}
-function newProduct(){document.getElementById("productEditor").classList.remove("hidden");document.getElementById("productEditorTitle").textContent="Novo produto";["editId","editName","editEmoji","editCost","editPrice"].forEach(id=>document.getElementById(id).value="");}
-function editProduct(id){let p=byId(id);if(!p)return;newProduct();document.getElementById("productEditorTitle").textContent="Editar produto";document.getElementById("editId").value=p.id;document.getElementById("editName").value=p.name;document.getElementById("editEmoji").value=p.emoji;document.getElementById("editCost").value=p.cost.toFixed(2).replace(".",",");document.getElementById("editPrice").value=p.price.toFixed(2).replace(".",",");}
-function closeProductEditor(){document.getElementById("productEditor").classList.add("hidden")}
-function saveProduct(){
- let id=Number(document.getElementById("editId").value),name=document.getElementById("editName").value.trim();
- if(!name){alert("Informe o nome do produto.");return}
- let p={id:id||Date.now(),name,emoji:document.getElementById("editEmoji").value||"🌶️",cost:num(document.getElementById("editCost").value),price:num(document.getElementById("editPrice").value),image:""};
- let old=byId(id);if(old){p.image=old.image;products=products.map(x=>x.id===id?p:x)}else products.push(p);
- persist();closeProductEditor();renderProducts();updateDashboard();
-}
-function removeProduct(id){if(!confirm("Excluir este produto?"))return;products=products.filter(p=>p.id!==id);persist();renderProducts();updateDashboard()}
-function calculate(){
- let p=byId(document.getElementById("calcProduct").value);if(!p)return;
- let kg=num(document.getElementById("calcKg").value),cost=num(document.getElementById("calcCost").value),price=num(document.getElementById("calcPrice").value),qty=Math.max(0,Number(document.getElementById("calcQty").value)||0);
- let raw=kg*cost,pack=qty*packCost(),total=raw+pack,revenue=qty*price,profit=revenue-total;
- document.getElementById("rRaw").textContent=money(raw);document.getElementById("rPack").textContent=money(pack);document.getElementById("rTotal").textContent=money(total);document.getElementById("rRevenue").textContent=money(revenue);document.getElementById("rProfit").textContent=money(profit);
- document.getElementById("rNote").textContent=`Estimativa para ${qty} potes de 50 g. O rendimento teórico de ${kg} kg é ${kg*20} potes de 50 g, antes de perdas.`;
-}
-function addKitItem(){let p=byId(document.getElementById("kitProduct").value),q=Math.max(1,Number(document.getElementById("kitQuantity").value)||1);if(!p)return;let found=kitCart.find(x=>x.id===p.id);if(found)found.qty+=q;else kitCart.push({id:p.id,qty:q});renderKit()}
-function renderKit(){
- let cost=0,suggest=0;
- document.getElementById("kitItems").innerHTML=kitCart.map(item=>{let p=byId(item.id);if(!p)return"";cost+=(p.cost/20+packCost())*item.qty;suggest+=p.price*item.qty;return `<div class="row" style="border-bottom:1px solid var(--line);padding:8px 0"><div>${esc(p.emoji)} ${esc(p.name)} × ${item.qty}</div><button class="small danger" style="flex:0 0 auto" onclick="removeKitItem(${p.id})">Remover</button></div>`}).join("")||"Adicione produtos ao kit.";
- let sale=num(document.getElementById("kitSale").value);
- document.getElementById("kitCost").textContent=money(cost);document.getElementById("kitSuggested").textContent=money(suggest);document.getElementById("kitProfit").textContent=money(sale-cost);
-}
-function removeKitItem(id){kitCart=kitCart.filter(x=>x.id!==id);renderKit()}
-function saveKit(){if(!kitCart.length){alert("Adicione produtos ao kit.");return}let name=document.getElementById("kitName").value.trim()||"Kit Sabor D+";kits.push({id:Date.now(),name,items:structuredClone(kitCart),sale:num(document.getElementById("kitSale").value)});persist();renderSavedKits()}
-function renderSavedKits(){document.getElementById("savedKits").innerHTML=kits.map(k=>`<div class="row" style="padding:8px;border-bottom:1px solid var(--line)"><div><strong>${esc(k.name)}</strong><div class="muted">${k.items.map(i=>{let p=byId(i.id);return p?esc(p.name)+" × "+i.qty:"Produto removido"}).join(", ")}</div></div><strong>${money(k.sale)}</strong><button class="small danger" onclick="deleteKit(${k.id})">Excluir</button></div>`).join("")||"Nenhum kit salvo."}
-function deleteKit(id){kits=kits.filter(k=>k.id!==id);persist();renderSavedKits()}
-function loadLabelProduct(){
- let p=byId(document.getElementById("labelProduct").value);if(!p)return;
- document.getElementById("labelName").value=p.name;document.getElementById("labelEmoji").value=p.emoji||"";
- document.getElementById("labelPrice").value=p.price.toFixed(2).replace(".",",");
- productImageData=p.image||"";document.getElementById("productStatus").textContent=productImageData?"Imagem cadastrada":"Nenhuma imagem carregada";
- updatePreview();
-}
-function changeLabelType(){
- currentLabelType=document.getElementById("labelType").value;
- if(currentLabelType==="product"){setDims(63,38)}
- if(currentLabelType==="price"){setDims(45,30)}
- if(currentLabelType==="seal"){setDims(50,20)}
- updatePreview();
-}
-function setDims(w,h){document.getElementById("labelW").value=w;document.getElementById("labelH").value=h}
-function getState(){
- let ids=["labelType","labelW","labelH","marginX","marginY","gapX","gapY","copies","repeatProduct","labelProduct","labelName","labelEmoji","labelWeight","labelPrice","showPrice","labelSlogan","labelMade","labelExpiry","labelLot","labelContact","labelBrand","labelExtra","showCuts","labelBg","labelColor","labelPriceColor","fontName","fontPrice","labelAlign","labelBorder"];
- let s={};ids.forEach(id=>{let el=document.getElementById(id);s[id]=el.type==="checkbox"?el.checked:el.value});s.logoData=logoData;s.productImageData=productImageData;return s;
-}
-function applyState(s){
- Object.keys(s||{}).forEach(id=>{let el=document.getElementById(id);if(el){if(el.type==="checkbox")el.checked=s[id];else el.value=s[id]}});
- logoData=s.logoData||"";productImageData=s.productImageData||"";
- document.getElementById("logoStatus").textContent=logoData?"Logo carregada":"Nenhuma logo carregada";
- document.getElementById("productStatus").textContent=productImageData?"Imagem carregada":"Nenhuma imagem carregada";
- currentLabelType=document.getElementById("labelType").value;updatePreview();
-}
-function readImage(event,type){
- let file=event.target.files[0];if(!file)return;
- if(file.size>2*1024*1024){alert("Escolha uma imagem de até 2 MB para evitar excesso de armazenamento.");event.target.value="";return}
- let reader=new FileReader();reader.onload=()=>{if(type==="logo"){logoData=reader.result;localStorage.setItem("sd_logo",JSON.stringify(logoData));document.getElementById("logoStatus").textContent="Logo carregada"}else{productImageData=reader.result;document.getElementById("productStatus").textContent="Imagem carregada"}updatePreview()};reader.readAsDataURL(file);
-}
-function removeImage(type){if(type==="logo"){logoData="";localStorage.removeItem("sd_logo");document.getElementById("logoStatus").textContent="Nenhuma logo carregada"}else{productImageData="";document.getElementById("productStatus").textContent="Nenhuma imagem carregada"}updatePreview()}
-function buildLabel(product){
- let type=currentLabelType,name=document.getElementById("labelName").value,emoji=document.getElementById("labelEmoji").value;
- let price=num(document.getElementById("labelPrice").value),showPrice=document.getElementById("showPrice").checked;
- let bg=document.getElementById("labelBg").value,color=document.getElementById("labelColor").value,priceColor=document.getElementById("labelPriceColor").value;
- let align=document.getElementById("labelAlign").value,border=document.getElementById("labelBorder").value;
- let image=productImageData||(product&&product.image)||"";
- let logo=logoData?`<img class="logo" src="${logoData}">`:"";
- let productImg=image?`<img class="productImage" src="${image}">`:"";
- let priceHtml=showPrice?`<div class="priceTag">${money(price)}</div>`:"";
- let slogan=esc(document.getElementById("labelSlogan").value);
- let weight=esc(document.getElementById("labelWeight").value);
- let brand=esc(document.getElementById("labelBrand").value);
- let extra=esc(document.getElementById("labelExtra").value);
- let details=`${document.getElementById("labelMade").value?"Fab.: "+esc(document.getElementById("labelMade").value):""} ${document.getElementById("labelExpiry").value?"Val.: "+esc(document.getElementById("labelExpiry").value):""} ${document.getElementById("labelLot").value?"Lote: "+esc(document.getElementById("labelLot").value):""}<br>${esc(document.getElementById("labelContact").value)}<br>${extra}`;
- let css=`background:${bg};color:${color};text-align:${align};border:${border==="none"?"none":border==="dashed"?"1px dashed #888":"1px solid #aaa"};`;
- if(type==="price")return `<div class="label priceLabel" style="${css}">${logo}<div class="name">${esc(name)}</div>${productImg}${priceHtml}<div class="slogan">${slogan}</div></div>`;
- if(type==="seal")return `<div class="label sealLabel" style="${css}">${logo}${productImg}<div class="emoji">${esc(emoji)}</div><div class="name">${esc(brand||name)}</div><div class="slogan">${slogan||esc(name)}</div></div>`;
- return `<div class="label" style="${css}">${logo}<div class="row" style="display:flex;align-items:center;gap:4px;flex:1"><div class="emoji">${esc(emoji)}</div><div class="name">${esc(name)}</div></div>${productImg}<div class="weight">${weight}</div>${priceHtml}<div class="details">${details}</div><div class="slogan">${slogan||brand}</div>`;
-}
-function updatePreview(){
- let w=Math.max(10,Number(document.getElementById("labelW").value)||63),h=Math.max(10,Number(document.getElementById("labelH").value)||38);
- let mx=Math.max(0,Number(document.getElementById("marginX").value)||0),my=Math.max(0,Number(document.getElementById("marginY").value)||0);
- let gx=Math.max(0,Number(document.getElementById("gapX").value)||0),gy=Math.max(0,Number(document.getElementById("gapY").value)||0);
+
+function layout(){
+ let w=Math.max(10,n(val("w"))),h=Math.max(10,n(val("h"))),mx=Math.max(0,n(val("mx"))),my=Math.max(0,n(val("my"))),gx=Math.max(0,n(val("gx"))),gy=Math.max(0,n(val("gy")));
  let cols=Math.max(0,Math.floor((210-2*mx+gx)/(w+gx))),rows=Math.max(0,Math.floor((297-2*my+gy)/(h+gy)));
- let per=cols*rows,copies=Math.max(1,Number(document.getElementById("copies").value)||1);
- let list=[];
- if(document.getElementById("repeatProduct").value==="all"){
-  products.forEach(p=>{for(let i=0;i<copies;i++)list.push(p)});
- }else{
-  let p=byId(document.getElementById("labelProduct").value);if(p)for(let i=0;i<copies;i++)list.push(p);
- }
- let count=Math.min(list.length,per);
- let inner=document.getElementById("previewInner");
- inner.innerHTML="";
- let grid=document.createElement("div");grid.className="labelGrid";
- grid.style.left=(mx/210*100)+"%";grid.style.top=(my/297*100)+"%";
- grid.style.width=((cols*w+(cols-1)*gx)/210*100)+"%";
- grid.style.height=((rows*h+(rows-1)*gy)/297*100)+"%";
- grid.style.gridTemplateColumns=`repeat(${cols},${w/(cols*w+(cols-1)*gx)*100}%)`;
- grid.style.gridTemplateRows=`repeat(${rows},${h/(rows*h+(rows-1)*gy)*100}%)`;
- grid.style.columnGap=(gx/(cols*w+(cols-1)*gx)*100)+"%";
- grid.style.rowGap=(gy/(rows*h+(rows-1)*gy)*100)+"%";
- for(let i=0;i<count;i++){
-  let p=list[i],wrap=document.createElement("div");
-  wrap.innerHTML=buildLabel(p);
-  let label=wrap.firstElementChild;
-  label.style.width="100%";label.style.height="100%";
-  label.style.fontSize=`${Math.max(7,Math.min(14,Number(document.getElementById("fontName").value)||13))}px`;
-  label.querySelectorAll(".name").forEach(x=>x.style.fontSize=(Number(document.getElementById("fontName").value)||13)+"px");
-  label.querySelectorAll(".priceTag").forEach(x=>{x.style.fontSize=(Number(document.getElementById("fontPrice").value)||16)+"px";x.style.color= document.getElementById("labelPriceColor").value});
-  if(document.getElementById("showCuts").checked){let cut=document.createElement("div");cut.className="cut";label.appendChild(cut)}
-  grid.appendChild(label);
- }
- inner.appendChild(grid);
- document.getElementById("sheetInfo").textContent=`${cols} colunas × ${rows} linhas = ${per} etiquetas por folha. ${count} etiquetas nesta prévia. ${list.length>per?"As cópias excedentes serão impressas em páginas adicionais.":""}`;
+ return {w,h,mx,my,gx,gy,cols,rows,per:cols*rows};
 }
-function printLabels(){
- updatePreview();
- let w=Number(document.getElementById("labelW").value)||63,h=Number(document.getElementById("labelH").value)||38;
- let mx=Number(document.getElementById("marginX").value)||0,my=Number(document.getElementById("marginY").value)||0;
- let gx=Number(document.getElementById("gapX").value)||0,gy=Number(document.getElementById("gapY").value)||0;
- let cols=Math.max(1,Math.floor((210-2*mx+gx)/(w+gx))),rows=Math.max(1,Math.floor((297-2*my+gy)/(h+gy))),per=cols*rows;
- let copies=Math.max(1,Number(document.getElementById("copies").value)||1),list=[];
- if(document.getElementById("repeatProduct").value==="all")products.forEach(p=>{for(let i=0;i<copies;i++)list.push(p)});
- else{let p=byId(document.getElementById("labelProduct").value);if(p)for(let i=0;i<copies;i++)list.push(p)}
- let root=document.getElementById("printRoot");root.innerHTML="";
- for(let start=0;start<list.length;start+=per){
-  let sheet=document.createElement("div");sheet.className="sheet";
-  let inner=document.createElement("div");inner.className="sheetInner";
-  let grid=document.createElement("div");grid.className="labelGrid";
-  grid.style.left=mx+"mm";grid.style.top=my+"mm";
-  grid.style.width=(cols*w+(cols-1)*gx)+"mm";
-  grid.style.height=(rows*h+(rows-1)*gy)+"mm";
-  grid.style.gridTemplateColumns=`repeat(${cols},${w}mm)`;
-  grid.style.gridTemplateRows=`repeat(${rows},${h}mm)`;
-  grid.style.columnGap=gx+"mm";grid.style.rowGap=gy+"mm";
-  list.slice(start,start+per).forEach(p=>{
-   let wrap=document.createElement("div");wrap.innerHTML=buildLabel(p);
-   let label=wrap.firstElementChild;label.style.width=w+"mm";label.style.height=h+"mm";
-   label.style.fontSize=Math.max(7,Math.min(14,Number(document.getElementById("fontName").value)||13))+"px";
-   label.querySelectorAll(".name").forEach(x=>x.style.fontSize=(Number(document.getElementById("fontName").value)||13)+"px");
-   label.querySelectorAll(".priceTag").forEach(x=>{x.style.fontSize=(Number(document.getElementById("fontPrice").value)||16)+"px";x.style.color=document.getElementById("labelPriceColor").value});
-   if(!document.getElementById("showCuts").checked)label.querySelector(".cut")?.remove();
-   else{let cut=document.createElement("div");cut.className="cut";label.appendChild(cut)}
-   grid.appendChild(label);
-  });
-  inner.appendChild(grid);sheet.appendChild(inner);root.appendChild(sheet);
+function targets(){
+ let copies=Math.max(1,Math.min(500,n(val("copies"))||1));
+ if(val("scope")==="all"){
+   let all=products.flatMap(p=>Array(copies).fill(p));
+   if(el("fillSheet").checked){let L=layout(),need=Math.max(1,L.per);return Array.from({length:need},(_,i)=>all[i%all.length]).filter(Boolean)}
+   return all;
+ }
+ let p=products.find(x=>x.id==val("chosen"));if(!p)return [];
+ if(el("fillSheet").checked){let L=layout();return Array(Math.max(1,L.per)).fill(p)}
+ return Array(copies).fill(p);
+}
+function buildLabelNode(p,L,index){
+ let node=document.createElement("div");node.innerHTML=labelMarkup(p);node=node.firstElementChild;
+ let col=index%L.cols,row=Math.floor(index/L.cols);
+ node.style.left=((L.mx+col*(L.w+L.gx))/210*100)+"%";
+ node.style.top=((L.my+row*(L.h+L.gy))/297*100)+"%";
+ node.style.width=(L.w/210*100)+"%";
+ node.style.height=(L.h/297*100)+"%";
+ 
+ // Fator de escala para 50x30. Se o usuário mudar para 60x40, a escala aumenta.
+ let scale=Math.min(L.w/50, L.h/30);
+ 
+ // Aplicando tamanhos com limites de segurança para não sumirem
+ node.querySelectorAll(".name").forEach(x=>x.style.fontSize=Math.max(10,Math.min(24,n(val("nameSize"))||14)*scale)+"px");
+ node.querySelectorAll(".price").forEach(x=>x.style.fontSize=Math.max(8,Math.min(18,n(val("priceSize"))||10)*scale)+"px");
+ node.querySelectorAll(".emoji").forEach(x=>x.style.fontSize=Math.max(14,Math.min(30,18*scale))+"px");
+ node.querySelectorAll(".details span").forEach(x=>x.style.fontSize=Math.max(3.5,Math.min(7,4.5*scale))+"px");
+ node.querySelectorAll(".topline").forEach(x=>x.style.fontSize=Math.max(3.5,Math.min(6,4*scale))+"px");
+ 
+ if(el("cuts").checked){let c=document.createElement("div");c.className="cut";node.appendChild(c)}
+ return node;
+}
+function renderPreview(){
+ if(!el("preview"))return;
+ let L=layout(),list=targets(),pages=Math.max(1,Math.ceil(list.length/Math.max(1,L.per)));
+ el("preview").innerHTML="";
+ el("sheetInfo").textContent=`${L.cols} colunas × ${L.rows} linhas • ${L.per} por folha • ${list.length} etiquetas • ${pages} página(s)`;
+ if(L.cols<1||L.rows<1){el("preview").innerHTML="<p>As dimensões não cabem na folha com as margens atuais. Reduza o tamanho ou as margens.</p>";return}
+ for(let pg=0;pg<pages;pg++){
+   let sheet=document.createElement("div");sheet.className="sheet";
+   let inner=document.createElement("div");inner.className="sheet-inner";
+   list.slice(pg*L.per,(pg+1)*L.per).forEach((p,i)=>inner.appendChild(buildLabelNode(p,L,i)));
+   sheet.appendChild(inner);el("preview").appendChild(sheet);
+   let cap=document.createElement("div");cap.className="pagecaption";cap.textContent=`Página ${pg+1} de ${pages} • A4 210 × 297 mm`;el("preview").appendChild(cap);
+ }
+}
+function printA4(){
+ let L=layout(),list=targets();if(!L.per){alert("As etiquetas não cabem na folha. Ajuste as dimensões ou margens.");return}
+ if(!list.length){alert("Selecione um produto.");return}
+ let root=el("printRoot");root.innerHTML="";let pages=Math.ceil(list.length/L.per);
+ for(let pg=0;pg<pages;pg++){
+   let sheet=document.createElement("div");sheet.className="sheet";
+   let inner=document.createElement("div");inner.className="sheet-inner";
+   list.slice(pg*L.per,(pg+1)*L.per).forEach((p,i)=>{
+     let node=buildLabelNode(p,L,i);
+     node.style.left=(L.mx+(i%L.cols)*(L.w+L.gx))+"mm";
+     node.style.top=(L.my+Math.floor(i/L.cols)*(L.h+L.gy))+"mm";
+     node.style.width=L.w+"mm";node.style.height=L.h+"mm";
+     inner.appendChild(node);
+   });
+   sheet.appendChild(inner);root.appendChild(sheet);
  }
  window.print();
 }
-function saveModel(){
- let name=document.getElementById("modelName").value.trim();if(!name){alert("Digite um nome para o modelo.");return}
- models.push({id:Date.now(),name,state:getState()});persist();renderModels();updateDashboard();alert("Modelo salvo!");
-}
-function renderModels(){document.getElementById("modelSelect").innerHTML='<option value="">Selecione um modelo</option>'+models.map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join("")}
-function loadModel(){let m=models.find(x=>x.id==document.getElementById("modelSelect").value);if(!m)return alert("Selecione um modelo.");applyState(m.state)}
-function deleteModel(){let id=Number(document.getElementById("modelSelect").value);if(!id)return;models=models.filter(x=>x.id!==id);persist();renderModels();updateDashboard()}
-function resetStudio(){
- document.getElementById("labelType").value="product";setDims(63,38);
- document.getElementById("marginX").value=8;document.getElementById("marginY").value=8;
- document.getElementById("gapX").value=2;document.getElementById("gapY").value=2;
- document.getElementById("copies").value=1;document.getElementById("repeatProduct").value="one";
- loadLabelProduct();updatePreview();
-}
-function saveSettings(){
- settings={pot:num(document.getElementById("costPot").value),label:num(document.getElementById("costLabel").value),seal:num(document.getElementById("costSeal").value),extra:num(document.getElementById("costExtra").value),company:document.getElementById("companyName").value,contact:document.getElementById("companyContact").value,storage:document.getElementById("companyStorage").value};
- persist();document.getElementById("totalPackCost").textContent=money(packCost());updateDashboard();renderProducts();calculate();
-}
-function loadSettings(){
- document.getElementById("costPot").value=settings.pot.toFixed(2).replace(".",",");document.getElementById("costLabel").value=settings.label.toFixed(2).replace(".",",");document.getElementById("costSeal").value=settings.seal.toFixed(2).replace(".",",");document.getElementById("costExtra").value=settings.extra.toFixed(2).replace(".",",");
- document.getElementById("companyName").value=settings.company||"Sabor D+";document.getElementById("companyContact").value=settings.contact||"";document.getElementById("companyStorage").value=settings.storage||"";
- document.getElementById("totalPackCost").textContent=money(packCost());
-}
-function exportBackup(){
- let data={products,settings,models,kits,logoData};let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
- let a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="sabor-d-mais-backup.json";a.click();URL.revokeObjectURL(a.href);
-}
-function importBackup(event){
- let file=event.target.files[0];if(!file)return;let reader=new FileReader();
- reader.onload=()=>{try{let d=JSON.parse(reader.result);if(!Array.isArray(d.products))throw Error("Arquivo inválido");products=d.products;settings=d.settings||settings;models=d.models||[];kits=d.kits||[];logoData=d.logoData||"";persist();localStorage.setItem("sd_logo",JSON.stringify(logoData));location.reload()}catch(e){alert("Não foi possível restaurar este arquivo.")}};
- reader.readAsText(file);
-}
-
-function init(){
- renderProducts();renderModels();renderSavedKits();loadSettings();updateDashboard();
- document.getElementById("calcProduct").addEventListener("change",()=>{
-  let p=byId(document.getElementById("calcProduct").value);if(p){document.getElementById("calcCost").value=p.cost.toFixed(2).replace(".",",");document.getElementById("calcPrice").value=p.price.toFixed(2).replace(".",",");calculate()}
- });
- document.getElementById("labelContact").value=settings.contact||"";
- document.getElementById("labelExtra").value=settings.storage||"";
- loadLabelProduct();
- let p=products[0];if(p){document.getElementById("calcCost").value=p.cost.toFixed(2).replace(".",",");document.getElementById("calcPrice").value=p.price.toFixed(2).replace(".",",")}
- calculate();renderKit();updatePreview();
-}
+function saveModel(){let name=val("modelName").trim();if(!name)return alert("Digite um nome para o modelo.");models.push({id:Date.now(),name,state:state()});save();renderModels();updateStats();alert("Modelo salvo.")}
+function renderModels(){el("modelList").innerHTML='<option value="">Selecione</option>'+models.map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join("")}
+function loadModel(){let m=models.find(x=>x.id==val("modelList"));if(!m)return alert("Selecione um modelo.");applyState(m.state)}
+function deleteModel(){let id=Number(val("modelList"));if(!id)return;models=models.filter(m=>m.id!==id);save();renderModels();updateStats()}
+function resetDesign(){el("kind").value="product";el("w").value=50;el("h").value=30;el("mx").value=5;el("my").value=7;el("gx").value=2;el("gy").value=2;el("copies").value=1;el("fillSheet").checked=true;el("scope").value="one";el("accent").value="#819477";el("paper").value="#fffdf7";el("ink").value="#292f29";el("priceColor").value="#55764f";el("frameStyle").value="ornate";renderPreview()}
+function backup(){let data={products,models,settings};let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});let a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="sabor-d-plus-backup.json";a.click();URL.revokeObjectURL(a.href)}
+function restoreBackup(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!Array.isArray(d.products))throw 0;products=d.products;models=d.models||[];settings=d.settings||settings;save();location.reload()}catch{alert("Backup inválido.")}};r.readAsText(f)}
+function init(){renderProducts();renderModels();initSettings();fillCalc();calculate();loadProductLabel();renderPreview()}
 init();
 </script>
-</body>
-</html>
+</body></html>
